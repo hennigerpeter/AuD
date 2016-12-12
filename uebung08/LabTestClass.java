@@ -1,4 +1,4 @@
-//package fau.exercises.kw50;
+package fau.exercises.kw50;
 
 import java.awt.Color;
 import java.awt.Dimension;
