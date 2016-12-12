@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class LabRatSolver {
 
@@ -16,19 +14,22 @@ public abstract class LabRatSolver {
 	public static Point solve(LabRat labRat) {
 		// TODO
 		if(labRat == null)
-			throw new IllegalArgumentException("labRat Objekt ist null");
+			throw new IllegalArgumentException("LabRat is null");
 		
+		try {
 		
-		while (!labRat.isAtEndPosition()){
+			while (!labRat.isAtEndPosition()){
+				while(!labRat.facingWall())
+					labRat.stepForward();	
+				labRat.turnRight();
+				
+			}
 			
-			while(!labRat.facingWall())
-				labRat.stepForward();
-			
-			labRat.turnRight();
-			
+			return labRat.getCurrentPosition();
+		
+		} catch (Exception exc) {
+			throw new RuntimeException("Unimplemented Exception");
 		}
-		
-		return labRat.getCurrentPosition();
 	}
 
 	/**
@@ -47,49 +48,50 @@ public abstract class LabRatSolver {
 
 		// TODO
 		if(labRat == null)
-			throw new IllegalArgumentException("labRat Objekt ist null");
-
+			throw new IllegalArgumentException("LabRat is null");
 		
-		
-		return hops = solveshrtst(labRat, hops, r);
-	}
-
-	private static int solveshrtst(LabRat labRat, int hops, LabRatSolver r){
-		
-		// Sackgasse gefunden
-		if(labRat.facingWall() && !labRat.isAtEndPosition() && !labRat.isAtStartPosition())
-			return 0;
-		
-		// FinalState
-		if (labRat.isAtEndPosition())
-			return hops;
-		
-		int[] posDir = getPossibleDirections(labRat);
-		for(int i=0; i<posDir.length; i++){
+		try {
+			if (labRat.isAtEndPosition())
+				return hops;
 			
-			int acthops = hops;
-			// nur bewegen wenn dort keine wand ist ! 
-			labRat.moveToDirection(posDir[i]);
-			hops = solveshrtst(labRat, hops+1, r);
+			int[] posDirections;
 			
-			// Ansonsten gibt es Probleme mit dem moveback
-			if (hops == 0){
-				hops = acthops;
-				labRat.moveBack(posDir[i]);
+			if (hops == 0)
+				posDirections = getPossibleDirections(labRat, true);	
+			else
+				posDirections = getPossibleDirections(labRat, false);	
+			
+			int actDirection = labRat.getCurrentDirection();
+			
+			for (int i=0; i < posDirections.length; i++){
+				// try
+				
+				labRat.moveToDirection(posDirections[i]);
+				hops += 1;
+				
+				
+				int newHops = solveShortestPath(labRat, hops, r);
+				if (newHops != -1)
+					return newHops;
+					
+				// error
+				labRat.moveToDirection(labRat.getOppositeDirection(posDirections[i]));
+				
+				hops -= 1;
 			}
+					
+			return -1;
 			
+		} catch (Exception exc) {
+			throw new RuntimeException("Unimplemented Exception");
 		}
-
-		
-		return 0;
-			
-		
 	}
-	
-	private static int[] getPossibleDirections(LabRat labRat){
+
+	private static int[] getPossibleDirections(LabRat labRat, Boolean Init){
 		// Array 1 enthaelt noch alle moeglichen Richtungen
 		int[] posDir = {labRat.NORTH, labRat.EAST, labRat.SOUTH, labRat.WEST};
 		int actDirection = labRat.getCurrentDirection();
+		int oppDirection = labRat.getOppositeDirection();
 		
 		// Array 2 enthalt die Richtungen bei denen keine Wand kommt, ansonsten 999
 		// in c wird die Anzahl an moeglichen Richtungen gespeichert
@@ -97,13 +99,17 @@ public abstract class LabRatSolver {
 		int[] posDir2 = new int[posDir.length];
 		for(int i=0; i<posDir.length;i++){
 			labRat.turnToDirection(posDir[i]);
-			if(!labRat.facingWall()){
+			
+			// Die Richtung aus der wir kommen ist nur beim ersten Aufruf interessant
+			if(!Init && oppDirection == posDir[i])
+				posDir2[i] = 999;
+			else if(!labRat.facingWall()){
+						
 				posDir2[i] = posDir[i];
 				c +=1;
 			} else {
 				posDir2[i] = 999;
 			}
-			
 		}
 		
 		// In diesem Array sind nur die Richtungen ohne Wand enthalten
@@ -128,40 +134,4 @@ public abstract class LabRatSolver {
 	// Don't delete!! Tests will fail otherwise
 	public abstract void check();
 	
-	
-	
-	// Test
-	private static boolean[][] walls = new boolean[][] {
-		new boolean[] { true, true, true, true, true, true, true, true, true, true, true, true, true },
-		new boolean[] { true, false, false, false, false, false, false, false, true, false, false, false, true },
-		new boolean[] { true, false, true, true, true, true, true, false, true, false, true, false, true },
-		new boolean[] { true, false, false, false, false, false, true, false, false, false, true, false, true },
-		new boolean[] { true, true, true, true, true, false, true, true, true, true, true, false, true },
-		new boolean[] { true, false, false, false, true, false, false, false, true, false, false, false, true },
-		new boolean[] { true, false, true, false, true, true, true, false, true, false, true, true, true },
-		new boolean[] { true, false, true, false, false, false, true, false, true, false, false, false, true },
-		new boolean[] { true, false, true, true, true, false, true, false, true, true, true, false, true },
-		new boolean[] { true, false, true, false, false, false, true, false, true, false, true, false, true },
-		new boolean[] { true, false, true, true, true, true, true, true, true, false, true, false, true },
-		new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, true },
-		new boolean[] { true, true, true, true, true, true, true, true, true, true, true, true, true }, };
-		
-	public static void main(String[] args){
-		Point startPosition = new Point(3, 9);
-		Point endPosition = new Point(7, 9);
-		Lab maze = new Lab(startPosition, endPosition, walls);
-		LabRat mouse = new LabRat(maze);
-		
-		final List<String> stackTrace = new ArrayList<>();
-		int shortestPath = LabRatSolver.solveShortestPath(mouse, 0, new LabRatSolver() {
-			@Override
-			public void check() {
-				stackTrace.clear();
-				for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-					stackTrace.add(ste.getMethodName());
-				}
-			}
-		});
-		
-	}
 }

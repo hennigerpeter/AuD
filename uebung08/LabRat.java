@@ -120,7 +120,52 @@ public class LabRat {
 		case SOUTH: this.moveToDirection(NORTH); 	break;
 		case WEST:	this.moveToDirection(EAST); 	break;
 		}
-		this.turnToDirection(i);
+//		this.turnToDirection(i);
+	}
+
+	public void moveBack(LabRat labRat, int acthops, int hops) {
+		// TODO Auto-generated method stub
+		
+		int returntohops = hops - acthops;
+		
+		while(hops != returntohops){
+		if(labRat.facingWall())
+			labRat.turnRight();
+		
+		if(labRat.facingWall()){
+			labRat.turnLeft();
+			labRat.turnLeft();
+		}
+		if(labRat.facingWall())
+			return;
+		
+		labRat.stepForward();
+		hops -= 1;
+		}
+		
+	}
+
+	public int getOppositeDirection(int actualDirection){
+		int dir = getCurrentDirection();
+		int res = -1;
+		
+		switch (actualDirection) {
+		
+		case NORTH: res = SOUTH; break;
+		case EAST: 	res =  WEST; break;
+		case SOUTH: res =  NORTH; break;
+		case WEST:	res =  EAST; break;
+		}
+		
+		this.turnToDirection(dir);
+		return res;
+	}
+	
+	
+	public int getOppositeDirection() {
+		// TODO Auto-generated method stub
+		
+		return getOppositeDirection(this.getCurrentDirection());
 	}
 	
 }
