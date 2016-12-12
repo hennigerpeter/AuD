@@ -1,0 +1,80 @@
+A->C A->B C->B A->C B->A B->C A->C A->B C->B C->A B->A C->B A->C A->B C->B A->C B->A B->C A->C B->A C->B C->A B->A B->C A->C A->B C->B A->C B->A B->C A->C
+A->C A->B C->B A->C B->A B->C A->C
+
+
+
+n=1
+start -> end (0)
+
+n=2 
+
+start -> end (1)
+start -> mid (3)
+mid -> end (3)
+
+n=3 (Schritt)
+
+
+
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+start->end (1)
+mid->start (3)
+mid->end (3)
+
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+end->start (4)
+mid->start (5)
+end->mid (5)
+
+start->end (n=1)
+
+5 =====================================
+
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+start->end (1)
+mid->start (3)
+mid->end (3)
+
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+end->start (4)
+mid->start (5)
+end->mid (5)
+(bis hier drei scheiben)
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+start->end (1)
+mid->start (3)
+mid->end (3)
+
+start->end (1) (Annahme bei 2 Scheiben)
+mid->start (5) (wäre sonst 2)
+end->mid (5)   (wäre sonst 2)
+
+end->start (4)
+mid->start (3) (wäre sonst 5)
+mid->end (3)   (wäre sonst 5)
+(bis hier vier Scheiben)
+start->end (1)
+start->mid (2)
+end->mid (2)
+
+start->end (1)
+mid->start (3)
+mid->end (3)
+
+start->end (1)
+(bis hier fünf scheiben)
