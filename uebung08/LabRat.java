@@ -61,15 +61,17 @@ public class LabRat {
 
 	public boolean isAtEndPosition() {
 		//TODO
-		if (getCurrentPosition().x == lab.endPosition.x && getCurrentPosition().y == lab.endPosition.y)
-			return true;
-		
-		return false;
+		return isAtPosition(lab.endPosition.x, lab.endPosition.y);
 	}
 
 	public boolean isAtStartPosition() {
 		//TODO
-		if (getCurrentPosition().x == lab.startPosition.x && getCurrentPosition().y == lab.startPosition.y)
+		return isAtPosition(lab.startPosition.x, lab.startPosition.y);
+	}
+	
+	private boolean isAtPosition(int x, int y){
+		
+		if(x == getCurrentPosition().x && y == getCurrentPosition().y)
 			return true;
 		
 		return false;
@@ -99,9 +101,9 @@ public class LabRat {
 	
 	public void turnToDirection(int direction){
 		
-		while(getCurrentDirection() != direction){
+		while(getCurrentDirection() != direction)
 			turnLeft();
-		}
+		
 	}
 	
 	public void moveToDirection(int direction){
@@ -120,30 +122,29 @@ public class LabRat {
 		case SOUTH: this.moveToDirection(NORTH); 	break;
 		case WEST:	this.moveToDirection(EAST); 	break;
 		}
-//		this.turnToDirection(i);
 	}
 
-	public void moveBack(LabRat labRat, int acthops, int hops) {
-		// TODO Auto-generated method stub
-		
-		int returntohops = hops - acthops;
-		
-		while(hops != returntohops){
-		if(labRat.facingWall())
-			labRat.turnRight();
-		
-		if(labRat.facingWall()){
-			labRat.turnLeft();
-			labRat.turnLeft();
-		}
-		if(labRat.facingWall())
-			return;
-		
-		labRat.stepForward();
-		hops -= 1;
-		}
-		
-	}
+//	public void moveBack(LabRat labRat, int acthops, int hops) {
+//		// TODO Auto-generated method stub
+//		
+//		int returntohops = hops - acthops;
+//		
+//		while(hops != returntohops){
+//		if(labRat.facingWall())
+//			labRat.turnRight();
+//		
+//		if(labRat.facingWall()){
+//			labRat.turnLeft();
+//			labRat.turnLeft();
+//		}
+//		if(labRat.facingWall())
+//			return;
+//		
+//		labRat.stepForward();
+//		hops -= 1;
+//		}
+//		
+//	}
 
 	public int getOppositeDirection(int actualDirection){
 		int dir = getCurrentDirection();
@@ -164,7 +165,6 @@ public class LabRat {
 	
 	public int getOppositeDirection() {
 		// TODO Auto-generated method stub
-		
 		return getOppositeDirection(this.getCurrentDirection());
 	}
 	

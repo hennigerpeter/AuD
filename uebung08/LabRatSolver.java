@@ -28,7 +28,7 @@ public abstract class LabRatSolver {
 			return labRat.getCurrentPosition();
 		
 		} catch (Exception exc) {
-			throw new RuntimeException("Unimplemented Exception");
+			throw new RuntimeException("Undefined Runtime Exception");
 		}
 	}
 
@@ -51,9 +51,13 @@ public abstract class LabRatSolver {
 			throw new IllegalArgumentException("LabRat is null");
 		
 		try {
+			// Base
 			if (labRat.isAtEndPosition())
 				return hops;
 			
+			// Check the possible Directions. These are all directions without walls
+			// In the first run, all these directions are possible. After that, the 
+			// direction from which we came is filtered out.
 			int[] posDirections;
 			
 			if (hops == 0)
@@ -61,25 +65,23 @@ public abstract class LabRatSolver {
 			else
 				posDirections = getPossibleDirections(labRat, false);	
 			
-			int actDirection = labRat.getCurrentDirection();
-			
+			// Iterate and try all possible directions
 			for (int i=0; i < posDirections.length; i++){
-				// try
 				
+				// try to move in this direction
 				labRat.moveToDirection(posDirections[i]);
 				hops += 1;
-				
 				
 				int newHops = solveShortestPath(labRat, hops, r);
 				if (newHops != -1)
 					return newHops;
 					
-				// error
+				// return
 				labRat.moveToDirection(labRat.getOppositeDirection(posDirections[i]));
-				
 				hops -= 1;
 			}
-					
+			
+			// No solution found
 			return -1;
 			
 		} catch (Exception exc) {
@@ -88,19 +90,19 @@ public abstract class LabRatSolver {
 	}
 
 	private static int[] getPossibleDirections(LabRat labRat, Boolean Init){
-		// Array 1 enthaelt noch alle moeglichen Richtungen
-		int[] posDir = {labRat.NORTH, labRat.EAST, labRat.SOUTH, labRat.WEST};
+		// Array 1 contains all directions that exist
+		int[] posDir = {LabRat.NORTH, LabRat.EAST, LabRat.SOUTH, LabRat.WEST};
 		int actDirection = labRat.getCurrentDirection();
 		int oppDirection = labRat.getOppositeDirection();
 		
-		// Array 2 enthalt die Richtungen bei denen keine Wand kommt, ansonsten 999
-		// in c wird die Anzahl an moeglichen Richtungen gespeichert
+		// Array 2 contains directions without walls. Directions with walls are temporarily saved as 999
+		// the number of directions without walls is saved in "c" in order to create an array with that dimension
 		int c = 0;
 		int[] posDir2 = new int[posDir.length];
 		for(int i=0; i<posDir.length;i++){
 			labRat.turnToDirection(posDir[i]);
 			
-			// Die Richtung aus der wir kommen ist nur beim ersten Aufruf interessant
+			// In order to only go back if we want to, the direction we came from is only used in the first run. 
 			if(!Init && oppDirection == posDir[i])
 				posDir2[i] = 999;
 			else if(!labRat.facingWall()){
@@ -112,8 +114,8 @@ public abstract class LabRatSolver {
 			}
 		}
 		
-		// In diesem Array sind nur die Richtungen ohne Wand enthalten
-		// mit a wird der Zeiger innerhalb des neuen Arrays hochgezaehlt (Array 3 ist kleiner als Array 2)
+		// Array 3 contains only directions that are possible to move to
+		// variable a is used to point to the position in the smaller Array 3
 		int[] posDir3 = new int[c];
 		int a = 0;
 		for (int i = 0; i< posDir2.length; i++){
@@ -123,9 +125,8 @@ public abstract class LabRatSolver {
 			}
 		}
 		
-		// zurueck drehen
+		// Turn to the previous direction
 		labRat.turnToDirection(actDirection);
-		
 		
 		return posDir3;
 		
