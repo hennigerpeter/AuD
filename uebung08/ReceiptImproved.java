@@ -10,8 +10,13 @@ public class ReceiptImproved {
 		if (max <= 0)
 			throw new IllegalArgumentException ("param max must be >0");
 		
-		products = new String[max];
-		prices = new Integer[max];
+		try {
+			products = new String[max];
+			prices = new Integer[max];
+		} catch (OutOfMemoryError e){
+			throw new IllegalArgumentException("Out of memory: Number of receipt positions is too high");
+		}
+		
 		
 	}
 
