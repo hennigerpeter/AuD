@@ -4,14 +4,14 @@ import org.junit.*;
 
 public class ReceiptPublicTest {
 	
-	private static final int ARITHMETIC = 0;
-	private static final int NEGATIVE_ARRAY_SIZE = 1;
-	private static final int ARRAY_BOUNDS_MINUS = 2;
-	private static final int ARRAY_BOUNDS_PLUS = 3;
-	private static final int NPE_INTARRAY = 4;
-	private static final int NPE_PRODUCT = 5;
-	private static final int NUMBERFORMAT = 6;
-	private static final int OOM = 7;
+	private static final int ARITHMETIC = 0;			// true
+	private static final int NEGATIVE_ARRAY_SIZE = 1;   // true
+	private static final int ARRAY_BOUNDS_MINUS = 2;    // true
+	private static final int ARRAY_BOUNDS_PLUS = 3;     // true
+	private static final int NPE_INTARRAY = 4;  		// true
+	private static final int NPE_PRODUCT = 5;           // true
+	private static final int NUMBERFORMAT = 6;          // true
+	private static final int OOM = 7;					// true
 	private static final Map<Integer, Boolean> found = new HashMap<>();
 
 	@BeforeClass
@@ -70,6 +70,7 @@ public class ReceiptPublicTest {
 		} catch (Throwable t) {
 			classifyEx(t);
 		}
+		
 	}
 
 	public static void classifyEx(Throwable t) {

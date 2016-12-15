@@ -15,22 +15,27 @@ public class Solver {
 
 	public static void firstTrue() {
 		++countFirstTrue;
+		System.out.println("firstTrue");
 	}
 
 	public static void firstFalse() {
 		++countFirstFalse;
+		System.out.println("firstFalse");
 	}
 
 	public static void loopRun() {
 		++countLoopRun;
+		System.out.println("LoopRun");
 	}
 
 	public static void secondTrue() {
 		++countSecondTrue;
+		System.out.println("SecondTrue");
 	}
 
 	public static void secondFalse() {
 		++countSecondFalse;
+		System.out.println("SecondFalse");
 	}
 
 	public static int solve(int x, int y) {
