@@ -22,7 +22,7 @@ public class EleList<T> {
 	// gibt das erste (vorderste) Element der Liste zurueck
 	public static <T> T head(EleList<T> list) {
 
-		if (list.equals(null) || list.head.equals(null))
+		if (list == null || list.head == null)
 			return null;
 
 		return list.head;
@@ -32,7 +32,7 @@ public class EleList<T> {
 	// gibt die Restliste ohne das erste Element zurueck
 	public static <T> EleList<T> tail(EleList<T> list) {
 
-		if (list.equals(null) || list.tail.equals(null))
+		if (list == null || list.tail == null)
 			return null;
 
 		return list.tail;
