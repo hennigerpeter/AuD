@@ -13,9 +13,11 @@ public class EleList<T> {
 	// fuegt ein neues Element vorne in die Liste ein
 	public static <T> EleList<T> add(EleList<T> list, T head) {
 
-		list.tail = list;
-		list.head = head;
-		return list;
+		EleList<T> list2 = new EleList<T>();
+		list2.head = head;
+		list2.tail = list;
+
+		return list2;
 
 	}
 
