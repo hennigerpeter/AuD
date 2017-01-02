@@ -1,37 +1,42 @@
 public class EleList<T> {
-	
+
 	private T head;
-	private static EleList<?> tail;
-	
-	
-	// erzeugt eine neue und zunaechst leere Elementare Liste 
-	private EleList<?> create(){
-		
+	private EleList<T> tail;
+
+	// erzeugt eine neue und zunaechst leere Elementare Liste
+	public static EleList<?> create() {
+
 		return new EleList<>();
-		
+
 	}
-	
+
 	// fuegt ein neues Element vorne in die Liste ein
-	public static EleList<?> add(EleList<?> list, T head){
+	public static <T> EleList<T> add(EleList<T> list, T head) {
 
 		list.tail = list;
 		list.head = head;
 		return list;
-		
+
 	}
-	
+
 	// gibt das erste (vorderste) Element der Liste zurueck
-	public T head(EleList<?> list){
-		
-		return this.head;
-		
+	public static <T> T head(EleList<T> list) {
+
+		if (list.equals(null) || list.head.equals(null))
+			return null;
+
+		return list.head;
+
 	}
-	
+
 	// gibt die Restliste ohne das erste Element zurueck
-	public static EleList<?> tail(EleList<?> list){
-		
+	public static <T> EleList<T> tail(EleList<T> list) {
+
+		if (list.equals(null) || list.tail.equals(null))
+			return null;
+
 		return list.tail;
-		
+
 	}
-	
+
 }
