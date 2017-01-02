@@ -60,6 +60,9 @@ public class NatAlg {
 	// kgV im Nat Raum
 	public static Nat lcm(Nat a, Nat b) {
 
+		EleList<Nat> alist = pfz(a);
+		EleList<Nat> blist = pfz(b);
+
 		return a;
 	}
 
@@ -69,8 +72,9 @@ public class NatAlg {
 		return new EleList<Nat>();
 	}
 
-	private static EleList<Nat> pfzH(Nat a, Nat b) {
-		EleList<Nat> list = new EleList<Nat>();
+	private static EleList<Nat> pfzH(EleList<Nat> list, Nat b) {
+
+		list = EleList.add(list, b);
 		return list;
 
 	}
