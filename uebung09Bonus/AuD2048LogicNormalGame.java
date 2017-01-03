@@ -3,72 +3,132 @@ public class AuD2048LogicNormalGame extends AuD2048Logic {
 
 	// AuD2048Logic game = AuD2048Logic.loadLogic("AuD2048LogicNormalGame");
 
+	final int randomNumber1 = 2;
+	final int randomNumber2 = 4;
+	final int percentageNumber1 = 75;
+
 	public AuD2048LogicNormalGame() {
 		// startNewGame();
 	}
 
 	@Override
 	public void startNewGame() {
-		// TODO Auto-generated method stub
+
 		this.gameBoard = new long[this.cols][this.rows];
 		placeRndNumbers();
 	}
 
 	@Override
 	public void move(Direction direction) {
-		// TODO Auto-generated method stub
-		for (int y = 0; y < gameBoard.length; y++) {
-			for (int x = 0; x < gameBoard[y].length; x++) {
-				switch (direction) {
-				case UP:
-					if (y != 0)
-						if (gameBoard[y][x] != 0)
-							if (gameBoard[y + 1][x] == 0) {
-								gameBoard[y + 1][x] = gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							} else if (gameBoard[y][x] == gameBoard[y + 1][x]) {
-								gameBoard[y + 1][x] += gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							}
-					break;
-				case DOWN:
-					if (y != gameBoard.length)
-						if (gameBoard[y][x] != 0)
-							if (gameBoard[y - 1][x] == 0) {
-								gameBoard[y - 1][x] = gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							} else if (gameBoard[y][x] == gameBoard[y - 1][x]) {
-								gameBoard[y - 1][x] += gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							}
 
-					break;
-				case LEFT:
-					if (x != 0)
-						if (gameBoard[y][x] != 0)
-							if (gameBoard[y][x - 1] == 0) {
-								gameBoard[y][x - 1] = gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							} else if (gameBoard[y][x] == gameBoard[y][x - 1]) {
-								gameBoard[y][x - 1] += gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							}
-					break;
-				case RIGHT:
-					if (x != gameBoard[y].length)
-						if (gameBoard[y][x] != 0)
-							if (gameBoard[y][x + 1] == 0) {
-								gameBoard[y][x + 1] = gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							} else if (gameBoard[y][x] == gameBoard[y][x + 1]) {
-								gameBoard[y][x + 1] += gameBoard[y][x];
-								gameBoard[y][x] = 0;
-							}
-					break;
-				}
-				placeRndNumbers();
+		// Iterate through cells
+		// Direction: LEFT/RIGHT: Zeile fuer Zeile durchgehen, UP/DOWN: Spalte
+		// fuer Spalte durchgehen. jewils von der anderen Seite
+		switch (direction) {
+		case UP:
+			for (int x = 0; x < gameBoard[0].length; x++) {
+				handleMovement(gameBoard.length - 1, x, direction);
 			}
+			break;
+		case DOWN:
+			for (int x = 0; x < gameBoard[0].length; x++) {
+				handleMovement(0, x, direction);
+			}
+			break;
+		case RIGHT:
+			for (int y = 0; y < gameBoard.length; y++) {
+				handleMovement(y, gameBoard[0].length, direction);
+			}
+			break;
+		case LEFT:
+			for (int y = 0; y < gameBoard.length; y++) {
+				handleMovement(y, 0, direction);
+			}
+			break;
 		}
+		
+		placeRndNumbers();
+
+	}
+
+	private void handleMovement(int y, int x, Direction direction) {
+
+		int y_neighbour = getYNeighbour(y, x, direction);
+		int x_neighbour = getXNeighbour(y, x, direction);
+
+		try {
+			// Cell is zero - possible new value
+			if (cellIsRelevant(y, x)) {
+				gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
+				gameBoard[y_neighbour][x_neighbour] = 0;
+			}
+			// Cell is > zero - possible melting
+			else {
+				melt(y, x, direction);
+			}
+
+			handleMovement(y_neighbour, x_neighbour, direction);
+
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return;
+	}
+
+	private void melt(int y, int x, Direction direction) {
+		// TODO Auto-generated method stub
+		int y_neighbour = getYNeighbour(y, x, direction);
+		int x_neighbour = getXNeighbour(y, x, direction);
+
+		try {
+			if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour]) {
+				gameBoard[y][x] *= 2;
+				gameBoard[y_neighbour][x_neighbour] = 0;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// If the Neighbour doesnt exist, just do nothing here.
+			e.printStackTrace();
+		}
+		return;
+	}
+
+	private int getXNeighbour(int y, int x, Direction direction) {
+		// TODO Auto-generated method stub
+		switch (direction) {
+		case UP:
+			return x;
+		case DOWN:
+			return x;
+		case RIGHT:
+			return x - 1;
+		case LEFT:
+			return x + 1;
+		}
+		return -1;
+	}
+
+	private int getYNeighbour(int y, int x, Direction direction) {
+		// TODO Auto-generated method stub
+		switch (direction) {
+		case UP:
+			return y + 1;
+		case DOWN:
+			return y - 1;
+		case RIGHT:
+			return y;
+		case LEFT:
+			return y;
+		}
+		return -1;
+	}
+
+	private boolean cellIsRelevant(int y, int x) {
+
+		if (gameBoard[y][x] > 0)
+			return true;
+
+		return false;
 	}
 
 	private void placeRndNumbers() {
@@ -92,7 +152,6 @@ public class AuD2048LogicNormalGame extends AuD2048Logic {
 				if (counter == 0) {
 					gameBoard[y][x] = rnd;
 
-					
 				}
 				counter--;
 
@@ -111,11 +170,10 @@ public class AuD2048LogicNormalGame extends AuD2048Logic {
 		// Random Number between 0 and 99 + 1
 		int rnd = (int) (Math.random() * 100 + 1);
 
-		// 4: 25% Chance, 2: 75% Chance
-		if (rnd > 75)
-			return 4;
+		if (rnd > percentageNumber1)
+			return randomNumber1;
 		else
-			return 2;
+			return randomNumber2;
 	}
 
 	@Override
