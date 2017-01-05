@@ -8,16 +8,20 @@ public class AuD2048LogicNormalGame extends AuD2048LogicCommon {
 	final int percentageNumber1 = 75;
 
 	public AuD2048LogicNormalGame() {
-		// startNewGame();
+
+		// overwrite Game Settings
+		super.randomNumber1 = randomNumber1;
+		super.randomNumber2 = randomNumber2;
+		super.percentageNumber1 = percentageNumber1;
 	}
 
-	
 	void melt(int y, int x, Direction direction) {
 		// TODO Auto-generated method stub
 		int y_neighbour = getYNeighbour(y, x, direction);
 		int x_neighbour = getXNeighbour(y, x, direction);
 
 		try {
+			// Melt occures also if both cells are equal to 0
 			if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour]) {
 				gameBoard[y][x] *= 2;
 				gameBoard[y_neighbour][x_neighbour] = 0;
@@ -29,7 +33,7 @@ public class AuD2048LogicNormalGame extends AuD2048LogicCommon {
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// If the Neighbour doesnt exist, just do nothing here.
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return;
 	}

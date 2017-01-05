@@ -1,8 +1,8 @@
 public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
-	public int randomNumber1 = 1;
-	final int randomNumber2 = 2;
-	final int percentageNumber1 = 75;
+	int randomNumber1;
+	int randomNumber2;
+	int percentageNumber1;
 
 	protected boolean gameOver = false;
 	protected boolean hasWinner = false;
@@ -147,12 +147,12 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 		int y_neighbour = getYNeighbour(y, x, direction);
 		int x_neighbour = getXNeighbour(y, x, direction);
+
 		if (!gameOver) {
 			try {
 				// Cell is zero - possible new value
 				if (cellIsRelevant(y, x)) {
-					gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
-					gameBoard[y_neighbour][x_neighbour] = 0;
+					switchValues(y, x, direction);
 				}
 				// Cell is > zero - possible melting
 				else {
@@ -163,13 +163,30 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 			} catch (ArrayIndexOutOfBoundsException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		return;
 	}
 
-	abstract void melt(int y, int x, Direction direction);
+	private void switchValues(int y, int x, Direction direction) {
 
+		// Instead of checking if the next Cell exists, just run the script an
+		// return on ArrayIndexOutOfBounds
+
+		try {
+			int y_neighbour = getYNeighbour(y, x, direction);
+			int x_neighbour = getXNeighbour(y, x, direction);
+
+			gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
+			gameBoard[y_neighbour][x_neighbour] = 0;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+		}
+
+	}
+
+	abstract void melt(int y, int x, Direction direction);
 
 }
