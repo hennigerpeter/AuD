@@ -4,19 +4,27 @@ public class AuD2048LogicEleven extends AuD2048LogicCommon {
 	final int randomNumber2 = 2;
 	final int percentageNumber1 = 75;
 
-
-	@Override
-	void handleMovement(int i, int x, Direction direction) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
 	void melt(int y, int x, Direction direction) {
 		// TODO Auto-generated method stub
-		
-	}
+		int y_neighbour = getYNeighbour(y, x, direction);
+		int x_neighbour = getXNeighbour(y, x, direction);
 
+		try {
+			if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour]) {
+				gameBoard[y][x] += gameBoard[y][x];
+				gameBoard[y_neighbour][x_neighbour] = 0;
+
+				if (gameBoard[y][x] == 11) {
+					hasWinner = true;
+					gameOver = true;
+				}
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// If the Neighbour doesnt exist, just do nothing here.
+			e.printStackTrace();
+		}
+		return;
+	}
 
 }

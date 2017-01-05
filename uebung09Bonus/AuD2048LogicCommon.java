@@ -4,8 +4,8 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 	final int randomNumber2 = 2;
 	final int percentageNumber1 = 75;
 
-	private boolean gameOver = false;
-	private boolean hasWinner = false;
+	protected boolean gameOver = false;
+	protected boolean hasWinner = false;
 
 	@Override
 	public void startNewGame() {
@@ -143,8 +143,33 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 		return -1;
 	}
 
+	protected void handleMovement(int y, int x, Direction direction) {
+
+		int y_neighbour = getYNeighbour(y, x, direction);
+		int x_neighbour = getXNeighbour(y, x, direction);
+		if (!gameOver) {
+			try {
+				// Cell is zero - possible new value
+				if (cellIsRelevant(y, x)) {
+					gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
+					gameBoard[y_neighbour][x_neighbour] = 0;
+				}
+				// Cell is > zero - possible melting
+				else {
+					melt(y, x, direction);
+				}
+
+				handleMovement(y_neighbour, x_neighbour, direction);
+
+			} catch (ArrayIndexOutOfBoundsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return;
+	}
+
 	abstract void melt(int y, int x, Direction direction);
 
-	abstract void handleMovement(int y, int x, Direction direction);
 
 }
