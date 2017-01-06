@@ -33,7 +33,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 			break;
 		case RIGHT:
 			for (int y = 0; y < gameBoard.length; y++) {
-				handleMovement(y, gameBoard[0].length, direction);
+				handleMovement(y, gameBoard[0].length - 1, direction);
 			}
 			break;
 		case LEFT:
@@ -42,7 +42,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 			}
 			break;
 		}
-
+		// ToDo: sometimes only one number appears
 		placeRndNumbers();
 
 	}
@@ -150,14 +150,38 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 		if (!gameOver) {
 			try {
-				// Cell is zero - possible new value
-				if (cellIsRelevant(y, x)) {
-					switchValues(y, x, direction);
+				// ToDo: find next cell != 0 and do logic
+				// In this version of the logic, it is not possible to move
+				// numbers all the way from one side to the other.
+
+				// Solution: the recursion gives the number to the first zero
+				// Problem: How does the algorithm know how far it was looking?
+
+				// Cell is zero - Neighbour is != zero (get number)
+				else if (cellIsRelevant(y, x) && !cellIsRelevant(y_neighbour, x_neighbour)) {
+					gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
+					gameBoard[y_neighbour][x_neighbour] = 0;
 				}
-				// Cell is > zero - possible melting
-				else {
-					melt(y, x, direction);
+
+				// Cell is != zero - Neighbour is != zero (try melting)
+				else if (!cellIsRelevant(y, x) && !cellIsRelevant(y_neighbour, x_neighbour)) {
+					if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour])
+						melt(y, x, direction);
 				}
+				
+				// Cell is zero - Neighbour is zero (do nothing and turn to next
+				// cell)
+				if (cellIsRelevant(y, x) && cellIsRelevant(y_neighbour, x_neighbour)) {
+
+				}
+
+				// Cell is != zero - Neighbour is zero (do nothing and turn to
+				// next cell)
+				else if (!cellIsRelevant(y, x) && cellIsRelevant(y_neighbour, x_neighbour)) {
+
+				}
+
+
 
 				handleMovement(y_neighbour, x_neighbour, direction);
 
