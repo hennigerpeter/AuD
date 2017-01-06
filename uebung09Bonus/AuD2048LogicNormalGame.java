@@ -21,6 +21,12 @@ public class AuD2048LogicNormalGame extends AuD2048LogicCommon {
 		int x_neighbour = getXNeighbour(y, x, direction);
 
 		try {
+			
+			while (!cellIsRelevant(y_neighbour, x_neighbour)) {
+				y_neighbour = getYNeighbour(y_neighbour, x, direction);
+				x_neighbour = getXNeighbour(y, x_neighbour, direction);
+			}
+			
 			// Melt occures also if both cells are equal to 0
 			if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour]) {
 				gameBoard[y][x] *= 2;

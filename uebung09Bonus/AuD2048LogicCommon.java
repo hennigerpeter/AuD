@@ -150,47 +150,19 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 		if (!gameOver) {
 			try {
-				// ToDo: find next cell != 0 and do logic
-				// In this version of the logic, it is not possible to move
-				// numbers all the way from one side to the other.
 
-				// Solution: the recursion gives the number to the first zero
-				// Problem: How does the algorithm know how far it was looking?
-
-				// Cell is zero - Neighbour is != zero (get number)
-				else if (cellIsRelevant(y, x) && !cellIsRelevant(y_neighbour, x_neighbour)) {
-					gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
-					gameBoard[y_neighbour][x_neighbour] = 0;
+				if (cellIsRelevant(y, x)) {
+					melt(y, x, direction);
+				} else {
+					switchValues(y, x, direction);
 				}
-
-				// Cell is != zero - Neighbour is != zero (try melting)
-				else if (!cellIsRelevant(y, x) && !cellIsRelevant(y_neighbour, x_neighbour)) {
-					if (gameBoard[y][x] == gameBoard[y_neighbour][x_neighbour])
-						melt(y, x, direction);
-				}
-				
-				// Cell is zero - Neighbour is zero (do nothing and turn to next
-				// cell)
-				if (cellIsRelevant(y, x) && cellIsRelevant(y_neighbour, x_neighbour)) {
-
-				}
-
-				// Cell is != zero - Neighbour is zero (do nothing and turn to
-				// next cell)
-				else if (!cellIsRelevant(y, x) && cellIsRelevant(y_neighbour, x_neighbour)) {
-
-				}
-
-
 
 				handleMovement(y_neighbour, x_neighbour, direction);
 
-			} catch (ArrayIndexOutOfBoundsException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+			} catch (Exception e) {
+				return;
 			}
 		}
-		return;
 	}
 
 	private void switchValues(int y, int x, Direction direction) {
@@ -201,6 +173,11 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 		try {
 			int y_neighbour = getYNeighbour(y, x, direction);
 			int x_neighbour = getXNeighbour(y, x, direction);
+
+			while (!cellIsRelevant(y_neighbour, x_neighbour)) {
+				y_neighbour = getYNeighbour(y_neighbour, x, direction);
+				x_neighbour = getXNeighbour(y, x_neighbour, direction);
+			}
 
 			gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
 			gameBoard[y_neighbour][x_neighbour] = 0;
