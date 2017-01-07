@@ -33,7 +33,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 			break;
 		case RIGHT:
 			for (int y = 0; y < gameBoard.length; y++) {
-				handleMovement(y, gameBoard[0].length, direction);
+				handleMovement(y, gameBoard[0].length - 1, direction);
 			}
 			break;
 		case LEFT:
@@ -42,7 +42,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 			}
 			break;
 		}
-
+		// ToDo: sometimes only one number appears
 		placeRndNumbers();
 
 	}
@@ -150,23 +150,19 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 		if (!gameOver) {
 			try {
-				// Cell is zero - possible new value
+
 				if (cellIsRelevant(y, x)) {
-					switchValues(y, x, direction);
-				}
-				// Cell is > zero - possible melting
-				else {
 					melt(y, x, direction);
+				} else {
+					switchValues(y, x, direction);
 				}
 
 				handleMovement(y_neighbour, x_neighbour, direction);
 
-			} catch (ArrayIndexOutOfBoundsException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
+			} catch (Exception e) {
+				return;
 			}
 		}
-		return;
 	}
 
 	private void switchValues(int y, int x, Direction direction) {
@@ -177,6 +173,11 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 		try {
 			int y_neighbour = getYNeighbour(y, x, direction);
 			int x_neighbour = getXNeighbour(y, x, direction);
+
+			while (!cellIsRelevant(y_neighbour, x_neighbour)) {
+				y_neighbour = getYNeighbour(y_neighbour, x, direction);
+				x_neighbour = getXNeighbour(y, x_neighbour, direction);
+			}
 
 			gameBoard[y][x] = gameBoard[y_neighbour][x_neighbour];
 			gameBoard[y_neighbour][x_neighbour] = 0;

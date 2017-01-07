@@ -60,22 +60,35 @@ public class NatAlg {
 	// kgV im Nat Raum
 	public static Nat lcm(Nat a, Nat b) {
 
-		EleList<Nat> alist = pfz(a);
-		EleList<Nat> blist = pfz(b);
-
-		return a;
+		return Nat.div(Nat.mul(a, b), gcd(a, b));
 	}
 
 	// Primfaktorzerlegung im Nat-Raum (aufsteigend sortiert!)
 	public static EleList<Nat> pfz(Nat a) {
 
-		return new EleList<Nat>();
+		Nat b = Nat.succ(Nat.succ(Nat.zero()));
+		return pfzH(a, b);
 	}
 
-	private static EleList<Nat> pfzH(EleList<Nat> list, Nat b) {
+	private static EleList<Nat> pfzH(Nat a, Nat b) {
 
-		list = EleList.add(list, b);
-		return list;
+		// Es existieren zwei Basisfaelle:
+		// 1 = Nat.succ(Nat.zero());
+		// 0 = Nat.zero();
+		// In beiden Faellen wird eine leere Liste zurueck gegeben
+		if (Nat.sub(a, Nat.succ(Nat.zero())) == Nat.zero())
+			return new EleList<Nat>();
+
+		// Ist die Zahl ohne Rest teilbar, ist sie Bestandtteil der Loesung
+		if (mod(a, b) == Nat.zero()) {
+
+			EleList<Nat> result = EleList.add(pfzH(Nat.div(a, b), b), b);
+			if (result != null)
+				return result;
+		}
+
+		// Ist die Zahl nur mit Rest teilbar, wird die Suche fortgesetzt
+		return pfzH(a, Nat.succ(b));
 
 	}
 }
