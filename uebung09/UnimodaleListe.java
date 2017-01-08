@@ -1,3 +1,3 @@
 public interface UnimodaleListe<T> {
-	T hole(int index);
+	T hole(int index);	
 }
