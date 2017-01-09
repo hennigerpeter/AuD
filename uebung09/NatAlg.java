@@ -76,11 +76,11 @@ public class NatAlg {
 		// 1 = Nat.succ(Nat.zero());
 		// 0 = Nat.zero();
 		// In beiden Faellen wird eine leere Liste zurueck gegeben
-		if (Nat.sub(a, Nat.succ(Nat.zero())) == Nat.zero())
+		if (Nat.sub(a, Nat.succ(Nat.zero())).equals(Nat.zero()))
 			return new EleList<Nat>();
 
 		// Ist die Zahl ohne Rest teilbar, ist sie Bestandtteil der Loesung
-		if (mod(a, b) == Nat.zero()) {
+		if (mod(a, b).equals(Nat.zero())) {
 
 			EleList<Nat> result = EleList.add(pfzH(Nat.div(a, b), b), b);
 			if (result != null)
