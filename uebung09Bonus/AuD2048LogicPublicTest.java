@@ -44,6 +44,65 @@ public class AuD2048LogicPublicTest {
 		logic.move(Direction.DOWN);
 	}
 
+	
+	
+	/* Eigene Test */
+	// ---------- AuD2048LogicNormalGame ----------------------------------------
+		@Test(timeout = 666)
+		public void test_AuD2048LogicNormalGame_CheckMovementRIGHT_PUBLIC_MAIN_TEST() {
+			AuD2048Logic logic = new AuD2048LogicNormalGame();
+			logic.initializeLogic(4, 4);
+			
+			logic.gameBoard = new long[][]{{4,0,0,0},{8,2,0,0},{2,0,0,0},{2,2,0,0}};
+			long[][] gameBoardFinal = new long[][]{{0,0,0,4},{0,0,8,2},{0,0,0,2},{0,0,0,4}};
+			logic.move(Direction.RIGHT);
+			
+			assertEquals("Die Rechtsbewegung hat nicht das erwuenschte Ergebnis", gameBoardFinal, logic.gameBoard);
+			
+		}
+		
+	// ---------- AuD2048LogicNormalGame ----------------------------------------
+		@Test(timeout = 666)
+		public void test_AuD2048LogicNormalGame_CheckMovementLEFT_PUBLIC_MAIN_TEST() {
+			AuD2048Logic logic = new AuD2048LogicNormalGame();
+			logic.initializeLogic(4, 4);
+			
+			logic.gameBoard = new long[][]{{0,0,0,4},{0,0,8,2},{0,0,0,2},{0,0,2,2}};
+			long[][] gameBoardFinal = new long[][]{{4,0,0,0},{8,2,0,0},{2,0,0,0},{4,0,0,0}};
+			logic.move(Direction.LEFT);
+			
+			assertEquals("Die Rechtsbewegung hat nicht das erwuenschte Ergebnis", gameBoardFinal, logic.gameBoard);
+				
+		}
+
+		// ---------- AuD2048LogicNormalGame ----------------------------------------
+		@Test(timeout = 666)
+		public void test_AuD2048LogicNormalGame_CheckMovementUP_PUBLIC_MAIN_TEST() {
+			AuD2048Logic logic = new AuD2048LogicNormalGame();
+			logic.initializeLogic(4, 4);
+			
+			logic.gameBoard = new long[][]{{0,0,0,0},{0,0,0,4},{0,0,8,2},{0,0,2,4}};
+			long[][] gameBoardFinal = new long[][]{{0,0,8,4},{0,0,2,2},{0,0,0,4},{0,0,0,0}};
+			logic.move(Direction.UP);
+			
+			assertEquals("Die Rechtsbewegung hat nicht das erwuenschte Ergebnis", gameBoardFinal, logic.gameBoard);
+				
+		}
+
+		// ---------- AuD2048LogicNormalGame ----------------------------------------
+		@Test(timeout = 666)
+		public void test_AuD2048LogicNormalGame_CheckMovementDOWN_PUBLIC_MAIN_TEST() {
+			AuD2048Logic logic = new AuD2048LogicNormalGame();
+			logic.initializeLogic(4, 4);
+			
+			logic.gameBoard = new long[][]{{0,0,0,4},{0,0,8,2},{0,0,0,2},{0,0,2,2}};
+			long[][] gameBoardFinal = new long[][]{{0,0,0,0},{0,0,0,4},{0,0,8,2},{0,0,2,4}};
+			logic.move(Direction.DOWN);
+			
+			assertEquals("Die Rechtsbewegung hat nicht das erwuenschte Ergebnis", gameBoardFinal, logic.gameBoard);
+				
+		}
+
 	// ==================== main ====================
 	// nothing to do ;) - please do nothing here:
 	public static void main(String args[]) {
