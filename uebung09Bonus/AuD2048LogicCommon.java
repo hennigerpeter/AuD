@@ -3,6 +3,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 	int randomNumber1;
 	int randomNumber2;
 	int percentageNumber1;
+	int rndnumbers = 2;
 
 	protected boolean gameOver = false;
 	protected boolean hasWinner = false;
@@ -23,12 +24,12 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 		switch (direction) {
 		case UP:
 			for (int x = 0; x < gameBoard[0].length; x++) {
-				handleMovement(gameBoard.length - 1, x, direction);
+				handleMovement(0, x, direction);
 			}
 			break;
 		case DOWN:
 			for (int x = 0; x < gameBoard[0].length; x++) {
-				handleMovement(0, x, direction);
+				handleMovement(gameBoard.length - 1, x, direction);
 			}
 			break;
 		case RIGHT:
@@ -42,7 +43,6 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 			}
 			break;
 		}
-		// ToDo: sometimes only one number appears
 		placeRndNumbers();
 
 	}
@@ -72,25 +72,38 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 		int counter = (int) (Math.random() * 10);
 		counter *= (this.cols * this.rows);
 
-		// The Counter Variable ensures that all Fields are considered possible
-		// Spots for the new number.
-		int y = 0, x = 0;
-		while (counter >= 0) {
-			if (gameBoard[y][x] == 0) {
-				if (counter == 0) {
-					gameBoard[y][x] = rnd;
+		int check = 0;
+		// Check if there are enough 0 cells left on the GameBoard
+		for (int y = 0; y < gameBoard.length; y++) {
+			for (int x = 0; x < gameBoard[y].length; x++) {
+				if (gameBoard[y][x] == 0)
+					check++;
+			}
+		}
+		if (check >= rndnumbers) {
 
+			// The Counter Variable ensures that all Fields are considered
+			// possible
+			// Spots for the new number.
+			int y = 0, x = 0;
+			while (counter > 0) {
+				if (gameBoard[y][x] == 0) {
+					counter--;
+					if (counter == 0) {
+						gameBoard[y][x] = rnd;
+					}
 				}
-				counter--;
 
+				x++;
+				if (x >= gameBoard[y].length) {
+					x = 0;
+					y += 1;
+				}
+				if (y >= gameBoard.length)
+					y = 0;
 			}
-			x++;
-			if (x >= gameBoard[y].length) {
-				x = 0;
-				y += 1;
-			}
-			if (y >= gameBoard.length)
-				y = 0;
+		} else {
+			gameOver = true;
 		}
 	}
 
@@ -154,7 +167,12 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 				if (cellIsRelevant(y, x)) {
 					melt(y, x, direction);
 				} else {
+					// Switch moves the cells on the board, afterwards there
+					// needs to be another check
 					switchValues(y, x, direction);
+					if (cellIsRelevant(y, x)) {
+						melt(y, x, direction);
+					}
 				}
 
 				handleMovement(y_neighbour, x_neighbour, direction);
@@ -167,7 +185,7 @@ public abstract class AuD2048LogicCommon extends AuD2048Logic {
 
 	private void switchValues(int y, int x, Direction direction) {
 
-		// Instead of checking if the next Cell exists, just run the script an
+		// Instead of checking if the next Cell exists, just run the script and
 		// return on ArrayIndexOutOfBounds
 
 		try {
