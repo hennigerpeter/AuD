@@ -7,6 +7,9 @@ public class Klammern {
 
 	public static List<String> klammern(String input) {
 
+		if (input == null || input == "")
+			return mylist;
+
 		mylist.add(input);
 		mylist.add(klammeraussen(input));
 
@@ -18,7 +21,7 @@ public class Klammern {
 				mylist.add(string1);
 			if (valid(string2))
 				mylist.add(string2);
-			
+
 			for (int j = 0; j < string1.length(); j++) {
 				String string3 = string1.substring(0, j) + klammeraussen(string1.substring(j));
 				String string4 = klammeraussen(string1.substring(0, j)) + string1.substring(j, string1.length());
@@ -61,11 +64,12 @@ public class Klammern {
 
 		// Keine Eintraege mit nutzlosen Klammern
 		if (!input.contains("()"))
-			if(!input.contains(")))"))
-				if(!input.contains("((("))
-			// Keine Eintraege welche bereits in der Liste enthalten sind
-			if (!mylist.contains(input))
-			return true;
+			if (!input.contains(")))"))
+				if (!input.contains("((("))
+					// Keine Eintraege welche bereits in der Liste enthalten
+					// sind
+					if (!mylist.contains(input))
+					return true;
 
 		return false;
 
