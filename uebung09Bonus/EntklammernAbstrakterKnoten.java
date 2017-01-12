@@ -1,6 +1,6 @@
-import java.util.List;
+import java.util.*;
 
-public abstract class EntklammernAbstrakterKnoten implements List<Object>{
+public abstract class EntklammernAbstrakterKnoten implements List<EntklammernAbstrakterKnoten>{
 	
 	protected List<EntklammernAbstrakterKnoten> kinder;
 	
