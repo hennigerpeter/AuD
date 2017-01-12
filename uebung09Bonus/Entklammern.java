@@ -1,8 +1,5 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Entklammern {
 
@@ -16,8 +13,10 @@ public class Entklammern {
 		int offeneKlammer = 0;
 		String currentOhneKlammer = "";
 		String currentInKlammer = "";
-		List<EntklammernAbstrakterKnoten> kinder = new LinkedList<EntklammernAbstrakterKnoten>();
 
+		List<EntklammernAbstrakterKnoten> kinder = new LinkedList<EntklammernAbstrakterKnoten>();
+		EntklammernAbstrakterKnoten BlattMitKnoten = null;
+		EntklammernAbstrakterKnoten Knoten = null;
 		// Parser
 		for (char c : s.toCharArray()) {
 
@@ -26,15 +25,14 @@ public class Entklammern {
 					throw new IllegalArgumentException();
 
 				// Fall: "(AUD)" erhaelt einen eigenen Knoten
-				EntklammernAbstrakterKnoten BlattMitKnoten = new EntklammernBlatt(currentInKlammer);
-				EntklammernAbstrakterKnoten Knoten = new EntklammernKnoten(BlattMitKnoten);
+				BlattMitKnoten = new EntklammernBlatt(currentInKlammer);
+				Knoten = new EntklammernKnoten(BlattMitKnoten);
 				kinder.add(Knoten);
 
 				// Fuer die weitere Verarbeitung
 				currentInKlammer = "";
 				currentOhneKlammer = "";
 				offeneKlammer--;
-
 			}
 
 			else if (c == '(') {
@@ -46,7 +44,6 @@ public class Entklammern {
 						EntklammernAbstrakterKnoten BlattOhneKnoten = new EntklammernBlatt(currentOhneKlammer);
 						kinder.add(BlattOhneKnoten);
 					}
-
 				}
 
 				currentOhneKlammer = "";
@@ -76,13 +73,17 @@ public class Entklammern {
 
 		// Build Result
 		EntklammernAbstrakterKnoten Stamm = new EntklammernMischKnoten(kinder);
+
+//		if (Stamm.kinder().size() == 1) {
+//			if (Stamm.kinder().get(0).kinder().size() == 0)
+//				return Stamm.kinder().get(0);
+//		}
+
 		return Stamm;
-
 	}
 
-	public static void main(String[] args) {
-		EntklammernAbstrakterKnoten test = entklammern("(AUD)PFP");
-		System.out.println(test.toString());
-	}
-
+	// public static void main(String[] args) {
+	// EntklammernAbstrakterKnoten test = entklammern("(AUD)PFP");
+	// System.out.println(test.toString());
+	// }
 }

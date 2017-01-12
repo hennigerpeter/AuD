@@ -1,4 +1,3 @@
-import java.util.Arrays;
 
 public final class TiledWall extends AbstractWall {
 	public TiledWall(int rows, int columns, double densityEmpty) {
@@ -11,6 +10,6 @@ public final class TiledWall extends AbstractWall {
 
 	@Override
 	public void stickTiles(DesignTile[] designTiles) {
-		// TODO
+		
 	}
 }
