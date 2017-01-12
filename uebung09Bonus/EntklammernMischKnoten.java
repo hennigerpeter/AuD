@@ -19,12 +19,24 @@ public class EntklammernMischKnoten extends EntklammernAbstrakterKnoten {
 		return res;
 	}
 
+	
+	public List<EntklammernAbstrakterKnoten> kinder(){
+	
+		return kinder;
+	}
+	
 	@Override
 	public boolean add(EntklammernAbstrakterKnoten e) {
 		// TODO Auto-generated method stub
 
 		try {
 			kinder.add(e);
+			
+			// Nur Kinder uebergeben die Knoten sind
+			
+			
+			
+			super.kinder = kinder;
 			return true;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -38,13 +50,14 @@ public class EntklammernMischKnoten extends EntklammernAbstrakterKnoten {
 	@Override
 	public void add(int index, EntklammernAbstrakterKnoten element) {
 		kinder.add(index, element);
-
+		super.kinder = kinder;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends EntklammernAbstrakterKnoten> c) {
 		try {
 			kinder.addAll(c);
+			super.kinder = kinder;
 			return true;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -58,6 +71,7 @@ public class EntklammernMischKnoten extends EntklammernAbstrakterKnoten {
 	public boolean addAll(int index, Collection<? extends EntklammernAbstrakterKnoten> c) {
 		try {
 			kinder.addAll(index, c);
+			super.kinder = kinder;
 			return true;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

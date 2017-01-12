@@ -5,6 +5,7 @@ public class EntklammernKnoten extends EntklammernMischKnoten {
 
 	public EntklammernKnoten(EntklammernAbstrakterKnoten kind) {
 		this.kind = kind;
+		super.add(kind);
 
 	}
 

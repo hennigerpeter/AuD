@@ -16,7 +16,7 @@ public class Entklammern {
 		int offeneKlammer = 0;
 		String currentOhneKlammer = "";
 		String currentInKlammer = "";
-		List<EntklammernAbstrakterKnoten> kinder = new LinkedList<>();
+		List<EntklammernAbstrakterKnoten> kinder = new LinkedList<EntklammernAbstrakterKnoten>();
 
 		// Parser
 		for (char c : s.toCharArray()) {
