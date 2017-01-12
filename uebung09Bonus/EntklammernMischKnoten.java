@@ -5,6 +5,7 @@ public class EntklammernMischKnoten extends EntklammernAbstrakterKnoten {
 	private List<EntklammernAbstrakterKnoten> kinder = new LinkedList<>();
 	public EntklammernMischKnoten(List<EntklammernAbstrakterKnoten> kinder) {
 		this.kinder = kinder;
+		super.kinder = kinder;
 	}
 	
 	public EntklammernMischKnoten(){};
