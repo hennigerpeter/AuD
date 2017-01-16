@@ -19,10 +19,13 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public void insertEntry(int idx, Pair<K, V> entry) {
 		// TODO c
+		if (entry.getKey() == null)
+			throw new IllegalArgumentException("The given key was null");
+		
 		Pair<K, V> bucket = buckets[idx];
 
 		if (bucket == null)
-			bucket = entry;
+			buckets[idx] = entry;
 		else {
 			while (bucket.nextPairInBucket != null)
 				bucket = bucket.nextPairInBucket;
@@ -34,6 +37,9 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public int getBucketIndex(K key) {
 		// TODO d
+		if (key == null)
+			throw new IllegalArgumentException("The given key was null");
+		
 		int hash = key.hashCode() % (buckets.length);
 
 		// TODO ungetestet
@@ -46,6 +52,9 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public Pair<K, V> getEntry(K key) {
 		// TODO e
+		if(key == null)
+			return null;
+		
 		int hash = getBucketIndex(key);
 		Pair<K, V> bucket = buckets[hash];
 
@@ -61,6 +70,9 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public V get(K key) {
 		// TODO f
+		if (key == null)
+			throw new IllegalArgumentException("The given key was null");
+		
 		Pair<K, V> bucket = getEntry(key);
 		if (bucket != null)
 			return bucket.getValue();
@@ -71,6 +83,8 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public boolean contains(K key) {
 		// TODO g
+		if (key == null)
+			return false;
 
 		Pair<K, V> bucket = getEntry(key);
 		if (bucket != null)
@@ -82,6 +96,8 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public boolean put(K key, V value) {
 		// TODO h
+		if (key == null)
+			throw new IllegalArgumentException("The given key was null");
 
 		Pair<K, V> bucket = getEntry(key);
 		if (bucket != null) {
@@ -97,6 +113,9 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@Override
 	public boolean remove(K key) {
 		// TODO i
+		if (key == null)
+			throw new IllegalArgumentException("The given key was null");
+		
 		int hash = getBucketIndex(key);
 		Pair<K, V> bucket = getEntry(key);
 		Pair<K, V> next = null;
@@ -133,11 +152,15 @@ public class ResizingHashMap<K, V> implements HashMapInterface<K, V> {
 	@SuppressWarnings("unchecked")
 	public void resize(int updatedCapacity) {
 		// TODO j
+		if (updatedCapacity < buckets.length)
+			throw new IllegalArgumentException("The new size must be > " + Integer.toString(buckets.length));
+		
+		
 		Pair<K, V>[] oldbuckets = buckets;
 		buckets = new Pair[updatedCapacity];
 		size = 0;
 
-		for (Pair<K, V> kv : buckets) {
+		for (Pair<K, V> kv : oldbuckets) {
 			if (kv != null) {
 				// Bucket fuellen
 				int index = getBucketIndex(kv.getKey());

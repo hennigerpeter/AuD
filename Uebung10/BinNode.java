@@ -51,21 +51,26 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public int getHeight() {
 
-		int childCount = 1;
+		if (!isTree())
+			return -1;
+
+		int childCount = 0;
+		int childCountChild = 0;
 		int childCountSibling = 0;
 		BinNode<T> child = this.child;
 		BinNode<T> sibling = this.sibling;
 
-		if (this.child != null)
-			childCount += child.getHeight();
+		if (this.child != null) {
+			childCountChild = 1 + child.getHeight();
+		}
 
 		if (this.sibling != null)
-			childCountSibling = this.sibling.getHeight();
+			childCountSibling = 1 + this.sibling.getHeight();
 
-		if (childCountSibling > childCount)
+		if (childCountSibling > childCountChild)
 			return childCountSibling;
 
-		return childCount;
+		return childCountSibling;
 	}
 
 	/**
@@ -81,6 +86,22 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isAVLTree() {
 		// TODO Auto-generated method stub
+		if(isBinaryTree()==false)
+			return false;
+
+		int left = 0;
+		int right = 0;
+		
+		if(child!=null){
+		left = child.getHeight();
+		if (child.sibling != null)
+		right = child.sibling.getHeight();
+		}
+		int h = child.getHeight() - child.sibling.getHeight();
+		
+		if (h >= -1 && h <= 1)
+			return true;
+		
 		return false;
 	}
 
@@ -92,7 +113,29 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isBinarySearchTree() {
 		// TODO Auto-generated method stub
-		return false;
+		if(isBinaryTree()==false)
+			return false;
+		
+		BinNode<T> node = this;
+		BinNode<T> left = node.child;
+		BinNode<T> right = node.child.sibling;
+		
+		while(node != null){
+			
+			if (left.value.compareTo(value)>=0)
+				return false;
+			if (left.value.compareTo(right.value)>=0)
+				return false;
+			if (left.value.compareTo(child.sibling.value)>=0)
+				return false;
+			if(right.value.compareTo(value)<=0)
+				return false;
+			
+			node = node.child;
+		}
+		
+		
+		return true;
 	}
 
 	/*
@@ -103,7 +146,28 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isBinaryTree() {
 		// TODO Auto-generated method stub
-		return false;
+		if (isTree() == false)
+			return false;
+
+		BinNode<T> node = this;
+
+		if (node.sibling != null)
+			return false;
+
+		while (node.child != null) {
+
+			// Check Child
+			node = node.child;
+
+			// children can only have 1 sibling
+			if (node.sibling != null) {
+				if (node.sibling.sibling != null)
+					return false;
+			}
+
+		}
+
+		return true;
 	}
 
 	/**
@@ -118,67 +182,69 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	 */
 	@Override
 	public boolean isMaxHeap() {
-		
-		if (child != null){
-			
-			if(child.value.compareTo(value) > 1)
+
+		if (child != null) {
+
+			if (child.value.compareTo(value) > 1)
 				return false;
-			
+
 			if (child.isMinHeap() == false)
 				return false;
 		}
 
 		if (sibling != null) {
-			
-			if(sibling.value.compareTo(value) > 1)
+
+			if (sibling.value.compareTo(value) > 1)
 				return false;
-			
+
 			if (sibling.isMinHeap() == false)
 				return false;
 		}
-		
-//		if (child != null && sibling != null)
-//			if (child.value.compareTo(child.sibling.value) > 1)
-//				return false;
+
+		// if (child != null && sibling != null)
+		// if (child.value.compareTo(child.sibling.value) > 1)
+		// return false;
 
 		return true;
 	}
 
 	/**
-	 * Checks if the current node is the root of a legal <i>Minheap</i> satisfying the shape and the heap properties and having the smallest {@linkplain #value} in this (root) node.
+	 * Checks if the current node is the root of a legal <i>Minheap</i>
+	 * satisfying the shape and the heap properties and having the smallest
+	 * {@linkplain #value} in this (root) node.
 	 * 
-	 * @return true if the current node is the root of an <i>Minheap</i>; false otherwise.
+	 * @return true if the current node is the root of an <i>Minheap</i>; false
+	 *         otherwise.
 	 * @see <a href="http://en.wikipedia.org/wiki/Binary_heap">Binary heap</a>
 	 * @see Comparable
 	 */
 	@Override
 	public boolean isMinHeap() {
-		
-		if (child != null){
-		
-			if(child.value.compareTo(value) < 1)
+
+		if (child != null) {
+
+			if (child.value.compareTo(value) < 1)
 				return false;
-			
+
 			if (child.isMinHeap() == false)
 				return false;
 		}
 
 		if (sibling != null) {
-			
-			if(sibling.value.compareTo(value) < 1)
+
+			if (sibling.value.compareTo(value) < 1)
 				return false;
-			
+
 			if (sibling.isMinHeap() == false)
 				return false;
 		}
-		
-//		if (child != null && sibling != null)
-//			if (child.value.compareTo(child.sibling.value) > 1)
-//				return false;
 
-		
+		// if (child != null && sibling != null)
+		// if (child.value.compareTo(child.sibling.value) > 1)
+		// return false;
+
 		return true;
-		
+
 	}
 
 	/**
@@ -194,34 +260,39 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isTree() {
 
-		if (child != null)
+		if (child != null) {
 			if (child.isTree() == false)
 				return false;
+			if (value != null && value.equals(child.value))
+				return false;
+
+			if (this == child)
+				return false;
+
+			if (child.sibling != null) {
+				if (child == child.sibling)
+					return false;
+				if (child.sibling == this)
+					return false;
+			}
+
+		}
 
 		if (sibling != null) {
 			if (sibling.isTree() == false)
 				return false;
-			if (sibling.value == null)
+			if (value != null && value.equals(sibling.value))
 				return false;
 		}
 
-		return true;
-	}
+		// Werte der Kinder duerfen nicht identisch sein
+		if (child != null && child.sibling != null)
+			if (child.value == sibling.value)
+				if (child.value != null)
+					return false;
 
-	/**
-	 * Returns a string representation of the current node and its descendants
-	 * using the <i>Newick tree format</i>. If the current node and its
-	 * descendants represent a cyclic structure, then this method will not
-	 * terminate (or probably end up with a {@link StackOverflowError}).
-	 * 
-	 * @return a string representation of the current node and its descendants
-	 *         using the <i>Newick tree format</i>.
-	 * @see <a href="http://en.wikipedia.org/wiki/Newick_format">Newick
-	 *      notation</a>
-	 */
-	@Override
-	public String toString() {
-		return "NotYetImplemented";
+
+		return true;
 	}
 
 }
