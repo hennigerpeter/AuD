@@ -11,11 +11,25 @@ public class BinNodePublicTest {
 		// _____b=========c______
 		// ___//_\_____//_|_\____
 		// ___d===e____f==g==h___
-		BinNode<String> f = new BinNode<>("f", null, new BinNode<>("g", null, new BinNode<>("h", null, null)));
-		BinNode<String> d = new BinNode<>("d", null, new BinNode<>("e", null, null));
-		BinNode<String> c = new BinNode<>("c", f, null);
-		BinNode<String> b = new BinNode<>("b", d, c);
-		simpleGeneralTree = new BinNode<>("a", b, null);
+		BinNode<String> f =
+			new BinNode<>("f",
+						  new BinNode<>("g",
+										new BinNode<>("h", null, null),
+										null),
+						  null);
+		BinNode<String> d =
+			new BinNode<>("d",
+						  new BinNode<>("e", null, null),
+						  null);
+		BinNode<String> c =
+			new BinNode<>("c",
+						  null, f);
+		BinNode<String> b =
+			new BinNode<>("b",
+						  c, d);
+		simpleGeneralTree =
+			new BinNode<>("a",
+						  null, b);
 	}
 
 	protected static final AbstractBinNode<String> simpleNonTree;
@@ -25,10 +39,15 @@ public class BinNodePublicTest {
 		// _____b====\\__\_______
 		// ___//_\_____===c______
 		// ___d===e==//__________
-		BinNode<String> c = new BinNode<>("c", null, null);
-		BinNode<String> d = new BinNode<>("d", null, new BinNode<>("e", null, c));
-		BinNode<String> b = new BinNode<>("b", d, c);
-		simpleNonTree = new BinNode<>("a", b, null);
+		BinNode<String> c =
+			new BinNode<>("c", null, null);
+		BinNode<String> d =
+			new BinNode<>("d",
+						  new BinNode<>("e", c, null), null);
+		BinNode<String> b =
+			new BinNode<>("b", c, d);
+		simpleNonTree =
+			new BinNode<>("a", null, b);
 	}
 
 	protected static final AbstractBinNode<Integer> simpleBinaryTree;
@@ -38,11 +57,18 @@ public class BinNodePublicTest {
 		// _____2========3______
 		// ___//_\_____//_\_____
 		// ___4===5____6===7____
-		BinNode<Integer> f = new BinNode<>(6, null, new BinNode<>(7, null, null));
-		BinNode<Integer> d = new BinNode<>(4, null, new BinNode<>(5, null, null));
-		BinNode<Integer> c = new BinNode<>(3, f, null);
-		BinNode<Integer> b = new BinNode<>(2, d, c);
-		simpleBinaryTree = new BinNode<>(1, b, null);
+		BinNode<Integer> f =
+			new BinNode<>(6,
+						  new BinNode<>(7, null, null), null);
+		BinNode<Integer> d =
+			new BinNode<>(4,
+						  new BinNode<>(5, null, null), null);
+		BinNode<Integer> c =
+			new BinNode<>(3, null, f);
+		BinNode<Integer> b =
+			new BinNode<>(2, c, d);
+		simpleBinaryTree =
+			new BinNode<>(1, null, b);
 	}
 
 	protected static final AbstractBinNode<Alephbeth> simpleBinarySearchTree;
@@ -52,11 +78,22 @@ public class BinNodePublicTest {
 		// _____b========w______
 		// ___//_\_____//_\_____
 		// ___a===g____h===z____
-		BinNode<Alephbeth> h = new BinNode<>(Alephbeth.He, null, new BinNode<>(Alephbeth.Zajin, null, null));
-		BinNode<Alephbeth> a = new BinNode<>(Alephbeth.Aleph, null, new BinNode<>(Alephbeth.Gimel, null, null));
-		BinNode<Alephbeth> w = new BinNode<>(Alephbeth.Waw, h, null);
-		BinNode<Alephbeth> b = new BinNode<>(Alephbeth.Beth, a, w);
-		simpleBinarySearchTree = new BinNode<>(Alephbeth.Daleth, b, null);
+		BinNode<Alephbeth> h =
+			new BinNode<>(Alephbeth.He,
+						  new BinNode<>(Alephbeth.Zajin, null, null), null);
+		BinNode<Alephbeth> a =
+			new BinNode<>(Alephbeth.Aleph,
+						  new BinNode<>(Alephbeth.Gimel, null, null), null);
+		BinNode<Alephbeth> w =
+			new BinNode<>(Alephbeth.Waw,
+						  null, h);
+		BinNode<Alephbeth> b =
+			new BinNode<>(Alephbeth.Beth,
+						  w,
+						  a);
+		simpleBinarySearchTree =
+			new BinNode<>(Alephbeth.Daleth,
+						  null, b);
 	}
 
 	// ========== BinNode.isTree ==========
