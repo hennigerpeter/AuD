@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<T> {
 
 	/*
@@ -23,14 +25,33 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public int getBranchingFactor() {
 
-		int siblingCount = 1;
-		BinNode<T> sibling = this.sibling;
+//		if (!this.isTree())
+//			return -1;
 
-		while (sibling != null) {
-			sibling = sibling.sibling;
-			siblingCount++;
+		return getBranchingHelper();
+	}
+
+	private int getBranchingHelper() {
+
+		int siblingCount = 0;
+		if (this.child != null) {
+
+			BinNode<T> sibling = this.child.sibling;
+			while (sibling != null) {
+				siblingCount++;
+				siblingCount += sibling.getBranchingHelper();
+				sibling = sibling.sibling;
+				
+			}
+			int others = this.child.getBranchingFactor();
+
+			if (others > siblingCount)
+				return others;
+
+			return siblingCount;
+
 		}
-		return siblingCount;
+		return 0;
 	}
 
 	/**
@@ -86,22 +107,22 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isAVLTree() {
 		// TODO Auto-generated method stub
-		if(isBinaryTree()==false)
+		if (isBinaryTree() == false)
 			return false;
 
 		int left = 0;
 		int right = 0;
-		
-		if(child!=null){
-		left = child.getHeight();
-		if (child.sibling != null)
-		right = child.sibling.getHeight();
+
+		if (child != null) {
+			left = child.getHeight();
+			if (child.sibling != null)
+				right = child.sibling.getHeight();
 		}
 		int h = child.getHeight() - child.sibling.getHeight();
-		
+
 		if (h >= -1 && h <= 1)
 			return true;
-		
+
 		return false;
 	}
 
@@ -113,28 +134,27 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isBinarySearchTree() {
 		// TODO Auto-generated method stub
-		if(isBinaryTree()==false)
+		if (isBinaryTree() == false)
 			return false;
-		
+
 		BinNode<T> node = this;
 		BinNode<T> left = node.child;
 		BinNode<T> right = node.child.sibling;
-		
-		while(node != null){
-			
-			if (left.value.compareTo(value)>=0)
+
+		while (node != null) {
+
+			if (left.value.compareTo(value) >= 0)
 				return false;
-			if (left.value.compareTo(right.value)>=0)
+			if (left.value.compareTo(right.value) >= 0)
 				return false;
-			if (left.value.compareTo(child.sibling.value)>=0)
+			if (left.value.compareTo(child.sibling.value) >= 0)
 				return false;
-			if(right.value.compareTo(value)<=0)
+			if (right.value.compareTo(value) <= 0)
 				return false;
-			
+
 			node = node.child;
 		}
-		
-		
+
 		return true;
 	}
 
@@ -260,39 +280,37 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isTree() {
 
-		if (child != null) {
-			if (child.isTree() == false)
-				return false;
-			if (value != null && value.equals(child.value))
-				return false;
+		// If the root has siblings, we are all doomed
+		if (this.sibling != null)
+			return false;
 
-			if (this == child)
-				return false;
+		// checks if all nodes are only pointed at once - recursive for all
+		// children
+		HashMap<BinNode<T>, Boolean> NodeMap = new HashMap<BinNode<T>, Boolean>();
+		return checkChildren(this, NodeMap);
 
-			if (child.sibling != null) {
-				if (child == child.sibling)
-					return false;
-				if (child.sibling == this)
-					return false;
-			}
-
-		}
-
-		if (sibling != null) {
-			if (sibling.isTree() == false)
-				return false;
-			if (value != null && value.equals(sibling.value))
-				return false;
-		}
-
-		// Werte der Kinder duerfen nicht identisch sein
-		if (child != null && child.sibling != null)
-			if (child.value == sibling.value)
-				if (child.value != null)
-					return false;
-
-
-		return true;
 	}
 
+	private boolean checkChildren(BinNode<T> node, HashMap<BinNode<T>, Boolean> nodeMap) {
+
+		// Check if the Node is already listed
+		if (nodeMap.get(node) != null)
+			return false;
+
+		nodeMap.put(node, true);
+
+		if (node.child != null) {
+			node = node.child;
+
+			// Check the child's children
+			while (node != null) {
+				if (checkChildren(node, nodeMap) == false)
+					return false;
+
+				// Check the siblings
+				node = node.sibling;
+			}
+		}
+		return true;
+	}
 }

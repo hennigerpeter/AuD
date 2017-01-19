@@ -14,7 +14,7 @@ public abstract class AbstractBinNode<T extends Comparable<T>> {
 	 */
 	protected BinNode<T> child;
 	
-	public AbstractBinNode(T value, BinNode<T> sibling, BinNode<T> child) {
+	public AbstractBinNode(T value, BinNode<T> child, BinNode<T> sibling) {
 		this.value = value;
 		this.sibling = sibling;
 		this.child = child;
