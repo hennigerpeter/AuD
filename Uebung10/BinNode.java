@@ -75,17 +75,25 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		if (!isTree())
 			return -1;
 
+		return getHeightHelper();
+	}
+
+	private int getHeightHelper() {
+
 		int childCountChild = 0;
 		int childCountSibling = 0;
 		BinNode<T> nextChild = this.child;
 		BinNode<T> nextSibling = this.sibling;
 
 		if (nextChild != null) {
-			childCountChild += nextChild.getHeight();
+			childCountChild = 1;
+			childCountChild += nextChild.getHeightHelper();
 		}
 
-		if (nextSibling != null)
-			childCountSibling = 1 + nextSibling.getHeight();
+		if (nextSibling != null){
+			childCountSibling = 1;
+			childCountSibling += nextSibling.getHeightHelper();
+		}
 
 		return Integer.max(childCountSibling, childCountChild);
 	}
@@ -308,29 +316,15 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 
 		return true;
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		final AbstractBinNode<String> simpleGeneralTree;
-		BinNode<String> f =
-				new BinNode<>("f",
-							  new BinNode<>("g",
-											new BinNode<>("h", null, null),
-											null),
-							  null);
-			BinNode<String> d =
-				new BinNode<>("d",
-							  new BinNode<>("e", null, null),
-							  null);
-			BinNode<String> c =
-				new BinNode<>("c",
-							  null, f);
-			BinNode<String> b =
-				new BinNode<>("b",
-							  c, d);
-			simpleGeneralTree =
-				new BinNode<>("a",
-							  null, b);
-			
-			boolean a = simpleGeneralTree.isTree();
+		BinNode<String> f = new BinNode<>("f", new BinNode<>("g", new BinNode<>("h", null, null), null), null);
+		BinNode<String> d = new BinNode<>("d", new BinNode<>("e", null, null), null);
+		BinNode<String> c = new BinNode<>("c", null, f);
+		BinNode<String> b = new BinNode<>("b", c, d);
+		simpleGeneralTree = new BinNode<>("a", null, b);
+
+		int a = simpleGeneralTree.getHeight();
 	}
 }
