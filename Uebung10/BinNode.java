@@ -25,8 +25,8 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public int getBranchingFactor() {
 
-//		if (!this.isTree())
-//			return -1;
+		if (!this.isTree())
+			return -1;
 
 		return getBranchingHelper();
 	}
@@ -41,7 +41,7 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 				siblingCount++;
 				siblingCount += sibling.getBranchingHelper();
 				sibling = sibling.sibling;
-				
+
 			}
 			int others = this.child.getBranchingFactor();
 
@@ -75,23 +75,19 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		if (!isTree())
 			return -1;
 
-		int childCount = 0;
 		int childCountChild = 0;
 		int childCountSibling = 0;
-		BinNode<T> child = this.child;
-		BinNode<T> sibling = this.sibling;
+		BinNode<T> nextChild = this.child;
+		BinNode<T> nextSibling = this.sibling;
 
-		if (this.child != null) {
-			childCountChild = 1 + child.getHeight();
+		if (nextChild != null) {
+			childCountChild += nextChild.getHeight();
 		}
 
-		if (this.sibling != null)
-			childCountSibling = 1 + this.sibling.getHeight();
+		if (nextSibling != null)
+			childCountSibling = 1 + nextSibling.getHeight();
 
-		if (childCountSibling > childCountChild)
-			return childCountSibling;
-
-		return childCountSibling;
+		return Integer.max(childCountSibling, childCountChild);
 	}
 
 	/**
@@ -296,21 +292,45 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		// Check if the Node is already listed
 		if (nodeMap.get(node) != null)
 			return false;
-
 		nodeMap.put(node, true);
 
-		if (node.child != null) {
-			node = node.child;
+		// now let's take a look at the child
+		node = node.child;
 
-			// Check the child's children
-			while (node != null) {
-				if (checkChildren(node, nodeMap) == false)
-					return false;
+		// Check the child's children
+		while (node != null) {
+			if (checkChildren(node, nodeMap) == false)
+				return false;
 
-				// Check the siblings
-				node = node.sibling;
-			}
+			// Check the siblings
+			node = node.sibling;
 		}
+
 		return true;
+	}
+	
+	public static void main(String[] args){
+		final AbstractBinNode<String> simpleGeneralTree;
+		BinNode<String> f =
+				new BinNode<>("f",
+							  new BinNode<>("g",
+											new BinNode<>("h", null, null),
+											null),
+							  null);
+			BinNode<String> d =
+				new BinNode<>("d",
+							  new BinNode<>("e", null, null),
+							  null);
+			BinNode<String> c =
+				new BinNode<>("c",
+							  null, f);
+			BinNode<String> b =
+				new BinNode<>("b",
+							  c, d);
+			simpleGeneralTree =
+				new BinNode<>("a",
+							  null, b);
+			
+			boolean a = simpleGeneralTree.isTree();
 	}
 }
