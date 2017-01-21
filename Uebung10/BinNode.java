@@ -207,6 +207,9 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMaxHeap() {
 
+		if(!this.isBinaryTree())
+			return false;
+		
 		if (child != null) {
 
 			if (child.value.compareTo(value) > 0)
@@ -241,6 +244,9 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMinHeap() {
 
+		if(!this.isBinaryTree())
+			return false;
+		
 		if (child != null) {
 
 			if (child.value.compareTo(value) < 0)
