@@ -209,25 +209,21 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 
 		if (child != null) {
 
-			if (child.value.compareTo(value) > 1)
+			if (child.value.compareTo(value) > 0)
 				return false;
 
-			if (child.isMinHeap() == false)
-				return false;
-		}
-
-		if (sibling != null) {
-
-			if (sibling.value.compareTo(value) > 1)
-				return false;
-
-			if (sibling.isMinHeap() == false)
+			if (child.isMaxHeap() == false)
 				return false;
 		}
 
-		// if (child != null && sibling != null)
-		// if (child.value.compareTo(child.sibling.value) > 1)
-		// return false;
+		if (child.sibling != null) {
+
+			if (child.sibling.value.compareTo(value) > 0)
+				return false;
+
+			if (child.sibling.isMaxHeap() == false)
+				return false;
+		}
 
 		return true;
 	}
@@ -247,25 +243,21 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 
 		if (child != null) {
 
-			if (child.value.compareTo(value) < 1)
+			if (child.value.compareTo(value) < 0)
 				return false;
 
 			if (child.isMinHeap() == false)
 				return false;
 		}
 
-		if (sibling != null) {
+		if (child.sibling != null) {
 
-			if (sibling.value.compareTo(value) < 1)
+			if (child.sibling.value.compareTo(value) < 0)
 				return false;
 
-			if (sibling.isMinHeap() == false)
+			if (child.sibling.isMinHeap() == false)
 				return false;
 		}
-
-		// if (child != null && sibling != null)
-		// if (child.value.compareTo(child.sibling.value) > 1)
-		// return false;
 
 		return true;
 
