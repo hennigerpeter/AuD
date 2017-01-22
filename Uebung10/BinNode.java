@@ -81,21 +81,27 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	private int getHeightHelper() {
 
 		int childCountChild = 0;
+		int childCountSiblingPrev = 0;
 		int childCountSibling = 0;
-		BinNode<T> nextChild = this.child;
+
+		// wir bewegen uns auf einer ebene, hier wird jedoch auf das Kind zugegriffen
 		BinNode<T> nextSibling = this.sibling;
 
-		if (nextChild != null) {
+		if (child != null) {
 			childCountChild = 1;
-			childCountChild += nextChild.getHeightHelper();
-		}
+			childCountChild += child.getHeightHelper();
+		} else
+			return 0;
 
-		if (nextSibling != null){
-			childCountSibling = 1;
+		while (nextSibling != null) {
+
 			childCountSibling += nextSibling.getHeightHelper();
+			childCountSibling = 1;
+			childCountSiblingPrev = Integer.max(childCountSiblingPrev, childCountSibling);
+			nextSibling = nextSibling.sibling;
 		}
 
-		return Integer.max(childCountSibling, childCountChild);
+		return Integer.max(childCountSiblingPrev, childCountChild);
 	}
 
 	/**
@@ -114,19 +120,12 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		if (isBinaryTree() == false)
 			return false;
 
-		int left = 0;
-		int right = 0;
-
-		if (child != null) {
-			left = child.getHeight();
-			if (child.sibling != null)
-				right = child.sibling.getHeight();
-		}
+		if(child != null && child.sibling != null){
 		int h = child.getHeight() - child.sibling.getHeight();
 
 		if (h >= -1 && h <= 1)
 			return true;
-
+		}
 		return false;
 	}
 
@@ -207,9 +206,9 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMaxHeap() {
 
-		if(!this.isBinaryTree())
+		if (!this.isBinaryTree())
 			return false;
-		
+
 		if (child != null) {
 
 			if (child.value.compareTo(value) > 0)
@@ -244,9 +243,9 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMinHeap() {
 
-		if(!this.isBinaryTree())
+		if (!this.isBinaryTree())
 			return false;
-		
+
 		if (child != null) {
 
 			if (child.value.compareTo(value) < 0)
