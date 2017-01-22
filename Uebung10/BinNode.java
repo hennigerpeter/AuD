@@ -243,6 +243,7 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMinHeap() {
 
+		// Is BinaryTree vlt nicht bei jedem mal pruefen sondern nur beim ersten lauf
 		if (!this.isBinaryTree())
 			return false;
 
@@ -315,13 +316,22 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	}
 
 	public static void main(String[] args) {
-		final AbstractBinNode<String> simpleGeneralTree;
-		BinNode<String> f = new BinNode<>("f", new BinNode<>("g", new BinNode<>("h", null, null), null), null);
-		BinNode<String> d = new BinNode<>("d", new BinNode<>("e", null, null), null);
-		BinNode<String> c = new BinNode<>("c", null, f);
-		BinNode<String> b = new BinNode<>("b", c, d);
-		simpleGeneralTree = new BinNode<>("a", null, b);
-
-		int a = simpleGeneralTree.getHeight();
+		// __________1__________
+				// ______//_____\_______
+				// _____2========3______
+				// ___//_\_____//_\_____
+				// ___4===5____6===7____
+				BinNode<Integer> f =
+					new BinNode<>(6,
+								  new BinNode<>(7, null, null), null);
+				BinNode<Integer> d =
+					new BinNode<>(4,
+								  new BinNode<>(5, null, null), null);
+				BinNode<Integer> c =
+					new BinNode<>(3, null, f);
+				BinNode<Integer> b =
+					new BinNode<>(2, c, d);
+				BinNode<Integer> simpleBinaryTree = new BinNode<>(1, null, b);
+		boolean a = simpleBinaryTree.isMinHeap();
 	}
 }
