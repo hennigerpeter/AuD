@@ -354,27 +354,4 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		return true;
 	}
 
-	public static void main(String[] args) {
-		// __________d__________
-				// ______//_____\_______
-				// _____b========w______
-				// ___//_\_____//_\_____
-				// ___a===g____h===z____
-				BinNode<Alephbeth> h =
-					new BinNode<>(Alephbeth.He,
-								  new BinNode<>(Alephbeth.Zajin, null, null), null);
-				BinNode<Alephbeth> a =
-					new BinNode<>(Alephbeth.Aleph,
-								  new BinNode<>(Alephbeth.Gimel, null, null), null);
-				BinNode<Alephbeth> w =
-					new BinNode<>(Alephbeth.Waw,
-								  null, h);
-				BinNode<Alephbeth> b =
-					new BinNode<>(Alephbeth.Beth,
-								  w,
-								  a);
-				BinNode<Alephbeth> simpleBinarySearchTree = new BinNode<>(Alephbeth.Daleth,
-							  null, b);
-		boolean res = simpleBinarySearchTree.isAVLTree();
-	}
 }
