@@ -84,7 +84,8 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		int childCountSiblingPrev = 0;
 		int childCountSibling = 0;
 
-		// wir bewegen uns auf einer ebene, hier wird jedoch auf das Kind zugegriffen
+		// wir bewegen uns auf einer ebene, hier wird jedoch auf das Kind
+		// zugegriffen
 		BinNode<T> nextSibling = this.sibling;
 
 		if (child != null) {
@@ -117,15 +118,17 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isAVLTree() {
 		// TODO Auto-generated method stub
-		if (isBinaryTree() == false)
+		if (isBinarySearchTree() == false)
 			return false;
-
-		if(child != null && child.sibling != null){
-		int h = child.getHeight() - child.sibling.getHeight();
-
-		if (h >= -1 && h <= 1)
-			return true;
-		}
+		int h = 0;
+		if (child != null)
+			if (child.sibling != null) {
+				int sib = child.sibling.getHeightHelper();
+				int chi = child.getHeightHelper();
+				h = chi - sib;
+				if (h >= -1 && h <= 1)
+					return true;
+			}
 		return false;
 	}
 
@@ -142,19 +145,22 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 
 		BinNode<T> node = this;
 		BinNode<T> left = node.child;
-		BinNode<T> right = node.child.sibling;
-
+		BinNode<T> right = null;
+		if (left != null)
+			right = node.child.sibling;
 		while (node != null) {
 
 			if (left.value.compareTo(value) >= 0)
 				return false;
-			if (left.value.compareTo(right.value) >= 0)
-				return false;
-			if (left.value.compareTo(child.sibling.value) >= 0)
-				return false;
-			if (right.value.compareTo(value) <= 0)
-				return false;
 
+			if (right != null) {
+				if (left.value.compareTo(right.value) >= 0)
+					return false;
+				if (left.value.compareTo(right.value) >= 0)
+					return false;
+				if (right.value.compareTo(node.value) <= 0)
+					return false;
+			}
 			node = node.child;
 		}
 
@@ -186,10 +192,13 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 			if (node.sibling != null) {
 				if (node.sibling.sibling != null)
 					return false;
+
+				if (node.sibling.child != null)
+					if (node.sibling.child.sibling != null)
+						if (node.sibling.child.sibling.sibling != null)
+							return false;
 			}
-
 		}
-
 		return true;
 	}
 
@@ -209,22 +218,36 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 		if (!this.isBinaryTree())
 			return false;
 
-		if (child != null) {
+		return isMaxHeapHelper();
+	}
 
-			if (child.value.compareTo(value) > 0)
+	private boolean isMaxHeapHelper() {
+		// TODO Auto-generated method stub
+		BinNode<T> currentChild = child;
+
+		if (currentChild != null) {
+			BinNode<T> currentSibling = child.sibling;
+
+			if (currentChild.value.compareTo(value) > 0)
 				return false;
 
-			if (child.isMaxHeap() == false)
-				return false;
-		}
-
-		if (child.sibling != null) {
-
-			if (child.sibling.value.compareTo(value) > 0)
+			if (currentChild.isMaxHeapHelper() == false)
 				return false;
 
-			if (child.sibling.isMaxHeap() == false)
-				return false;
+			while (currentSibling != null) {
+
+				if (currentSibling.value.compareTo(value) > 0)
+					return false;
+
+				if (currentSibling.value.compareTo(currentChild.value) > 0)
+					return false;
+
+				if (currentSibling.isMaxHeapHelper() == false)
+					return false;
+
+				currentChild = currentSibling;
+				currentSibling = currentSibling.sibling;
+			}
 		}
 
 		return true;
@@ -243,26 +266,42 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	@Override
 	public boolean isMinHeap() {
 
-		// Is BinaryTree vlt nicht bei jedem mal pruefen sondern nur beim ersten lauf
+		// Is BinaryTree vlt nicht bei jedem mal pruefen sondern nur beim ersten
+		// lauf
 		if (!this.isBinaryTree())
 			return false;
 
-		if (child != null) {
+		return isMinHeapHelper();
+	}
 
-			if (child.value.compareTo(value) < 0)
+	private boolean isMinHeapHelper() {
+		// TODO Auto-generated method stub
+
+		BinNode<T> currentChild = child;
+
+		if (currentChild != null) {
+			BinNode<T> currentSibling = child.sibling;
+
+			if (currentChild.value.compareTo(value) < 0)
 				return false;
 
-			if (child.isMinHeap() == false)
-				return false;
-		}
-
-		if (child.sibling != null) {
-
-			if (child.sibling.value.compareTo(value) < 0)
+			if (currentChild.isMinHeapHelper() == false)
 				return false;
 
-			if (child.sibling.isMinHeap() == false)
-				return false;
+			while (currentSibling != null) {
+
+				if (currentSibling.value.compareTo(value) < 0)
+					return false;
+
+				if (currentSibling.value.compareTo(currentChild.value) < 0)
+					return false;
+
+				if (currentSibling.isMinHeapHelper() == false)
+					return false;
+
+				currentChild = currentSibling;
+				currentSibling = currentSibling.sibling;
+			}
 		}
 
 		return true;
@@ -316,22 +355,26 @@ public class BinNode<T extends java.lang.Comparable<T>> extends AbstractBinNode<
 	}
 
 	public static void main(String[] args) {
-		// __________1__________
+		// __________d__________
 				// ______//_____\_______
-				// _____2========3______
+				// _____b========w______
 				// ___//_\_____//_\_____
-				// ___4===5____6===7____
-				BinNode<Integer> f =
-					new BinNode<>(6,
-								  new BinNode<>(7, null, null), null);
-				BinNode<Integer> d =
-					new BinNode<>(4,
-								  new BinNode<>(5, null, null), null);
-				BinNode<Integer> c =
-					new BinNode<>(3, null, f);
-				BinNode<Integer> b =
-					new BinNode<>(2, c, d);
-				BinNode<Integer> simpleBinaryTree = new BinNode<>(1, null, b);
-		boolean a = simpleBinaryTree.isMinHeap();
+				// ___a===g____h===z____
+				BinNode<Alephbeth> h =
+					new BinNode<>(Alephbeth.He,
+								  new BinNode<>(Alephbeth.Zajin, null, null), null);
+				BinNode<Alephbeth> a =
+					new BinNode<>(Alephbeth.Aleph,
+								  new BinNode<>(Alephbeth.Gimel, null, null), null);
+				BinNode<Alephbeth> w =
+					new BinNode<>(Alephbeth.Waw,
+								  null, h);
+				BinNode<Alephbeth> b =
+					new BinNode<>(Alephbeth.Beth,
+								  w,
+								  a);
+				BinNode<Alephbeth> simpleBinarySearchTree = new BinNode<>(Alephbeth.Daleth,
+							  null, b);
+		boolean res = simpleBinarySearchTree.isAVLTree();
 	}
 }
