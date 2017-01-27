@@ -11,31 +11,22 @@ public class MergeSort {
 
 	public static List merge(List left, List right) {
 		// TODO
-		if (left == null)
-			return new List(null);
 
-		if (right == null)
-			return left;
+		while (right.first != null) { // Reissverschluss
+			Element l = left.first;
+			Element r = right.first;
 
-		Element currentL = left.first;
-		Element nextL = currentL.next;
-		Element r1 = right.first;
+			if (l.getValue() <= r.getValue() && l.next.getValue() > r.getValue()) {
 
-		while (r1 != null) {
-			while (currentL.getValue() > r1.getValue() && nextL != null) {
+				Element temp = l.next;
+				l.next = r;
+				r.next = temp;
 
-				currentL = nextL;
-				nextL = currentL.next;
+				Element temp2 = right.first.next;
+				right.first = temp2;
 			}
-
-			// Reissverschluss
-			currentL.next = r1;
-			currentL.next.next = nextL;
-
-			r1 = r1.next;
 		}
-		// Right List doesnt get smaller -> stack overflow
-
+		
 		return left;
 	}
 
