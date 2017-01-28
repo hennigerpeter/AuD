@@ -9,25 +9,66 @@ public class MergeSort {
 		return null;
 	}
 
-	public static List merge(List left, List right) {
+	public List merge(List left, List right) {
 		// TODO
 
-		while (right.first != null) { // Reissverschluss
-			Element l = left.first;
-			Element r = right.first;
+		// int l =0;
+		// Element currentRight = right.first;
+		// Element currentLeft = getItem(l, left);
+		//
+		// while (currentRight != null) { // Reissverschluss
+		// currentRight = right.first;
+		// currentLeft = getItem(l, left);
+		//
+		// if (currentLeft.getValue() <= currentRight.getValue() &&
+		// currentLeft.next.getValue() > currentRight.getValue()) {
+		//
+		// Element temp = new Element(currentLeft.getValue(),currentLeft.next);
+		// currentLeft.next = currentRight;
+		// currentLeft.next.next = temp;
+		//
+		// Element temp2 = new Element(right.first.next.getValue(),
+		// right.first.next.next);
+		// right.first = temp2;
+		// }
+		// }
+		//
+		// return left;
 
-			if (l.getValue() <= r.getValue() && l.next.getValue() > r.getValue()) {
+		
+		
+	}
 
-				Element temp = l.next;
-				l.next = r;
-				r.next = temp;
-
-				Element temp2 = right.first.next;
-				right.first = temp2;
-			}
+	private List mergeSort(List list){
+		if (list.size() <= 1)
+			return list;
+		
+		// divide and conquer
+		int mitte = list.size()/2;
+		List links = mergeSort();
+		
+	}
+	
+	private List split(int i, List list){
+		
+		Element last = new Element(list.first.getValue(), list.first.next);
+		
+		for (int x = 0; x < i; x++){
+			last = last.next;
 		}
 		
-		return left;
+		List temp = new List(new Element(last.getValue(), null));
+		
+	}
+	
+	private Element getItem(int i, List list) {
+		Element elem = list.first;
+
+		for (int n = 0; n < i; n++) {
+			elem = elem.next;
+		}
+
+		return elem;
 	}
 
 	public static void main(String[] args) {
@@ -38,7 +79,7 @@ public class MergeSort {
 		List right = new List(new Element(6, null));
 		right.first = new Element(3, right.first);
 
-		List merge = merge(left, right);
+		// List merge = merge(left, right);
 
 	}
 }
