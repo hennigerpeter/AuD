@@ -1,3 +1,4 @@
+
 public class QuickSort {
 
 	public static <E> E[] swap(E[] array, int i, int j) {
@@ -12,7 +13,7 @@ public class QuickSort {
 
 	public static <E extends Comparable<? super E>> int choosePivot(E[] array, int start, int end) {
 		// TODO
-		int mid = (array.length-1) / 2;
+		int mid = (array.length - 1) / 2;
 
 		// start ist == mitte oder == end -> start hat kleinesten index
 		if (array[start].compareTo(array[mid]) == 0 || array[start].compareTo(array[end]) == 0)
@@ -39,43 +40,46 @@ public class QuickSort {
 	}
 
 	public static <E extends Comparable<? super E>> int partition(E[] array, int pivot, int start, int end) {
-		// TODO!
-		E p = array[pivot];
-		int i = start;
-		int j = end;
 
-		while (i < end) {
-			// {I: ...}
-			if (array[j].compareTo(p) <= 0) {
-				i++;
-				swap(array, i, j);
-			}
-			j--;
+		E p = array[pivot];
+		int l = start - 1;
+		int r = end + 1;
+
+		// Von Links und Rechts vergleichen, bis wir uns in der Mitte treffen
+		while (l < r) {
+			// Von Links nach Rechts
+			for (l++; array[l].compareTo(p) < 0; l++)
+				;
+			// Von Rechts nach Links
+			for (r--; array[r].compareTo(p) > 0; r--)
+				;
+			// Haben wir zwei Kandidaten zum Tauschen gefunden
+			if (l < r)
+				swap(array, l, r);
 		}
-		// {S: ...}
-		int r = i + 1;
-		swap(array, r, start);
-		// {Q: ...}
 		return r;
 	}
 
 	public static <E extends Comparable<? super E>> void sort(E[] array) {
-		// TODO
-		
-		sortRecursive(array, 0, array.length-1);
+
+		// Leere oder zu kleine Arrays werden abgefangen
+		if (array != null && array.length > 0)
+			sortRecursive(array, 0, array.length - 1);
 	}
 
 	private static <E extends Comparable<? super E>> void sortRecursive(E[] array, int start, int end) {
 
-		// Komplettes Array
-		int pivot = choosePivot(array, start, end);
-		pivot = partition(array, pivot, start, end);
+		// Basisfall
+		if (start < end) {
+			// Komplettes Array
+			int pivot = choosePivot(array, start, end);
+			pivot = partition(array, pivot, start, end);
 
-		// Linke Seite
-		sortRecursive(array, 0, pivot-1);
-		
-		// Rechte Seite
-		sortRecursive(array, pivot, end);
-		
+			// Linke Seite
+			sortRecursive(array, start, pivot - 1);
+
+			// Rechte Seite
+			sortRecursive(array, pivot + 1, end);
+		}
 	}
 }

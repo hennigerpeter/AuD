@@ -1,64 +1,89 @@
 public class MergeSort {
 
 	public void sort(List list) {
-		// TODO
+		List dontcare = doSort(list, list.size());
 	}
 
 	public List doSort(List list, int n) {
-		// TODO
-		return null;
+
+		// Basisfall
+		if (list.size() > 0) {
+
+			int mid = n / 2;
+
+			// divide
+			List otherhalf = div(list, mid);
+			list = doSort(list, list.size());
+			otherhalf = doSort(otherhalf, otherhalf.size());
+
+			// conquer
+			return merge(list, otherhalf);
+		}
+		return list;
 	}
 
 	public static List merge(List left, List right) {
 		// TODO
 
-		Element currentRight = new Element(right.first.getValue(), right.first.next);
-		Element currentLeft = new Element(left.first.getValue(), left.first.next);
+		// Basisfall
+		if (right == null)
+			return left;
+		if (left == null)
+			return right;
 
-		while (currentRight.next != null) { // Reissverschluss
+		Element currentRight = right.first;
+		Element currentLeft = left.first;
 
-			if (currentLeft.getValue() <= currentRight.getValue()
-					&& currentLeft.next.getValue() > currentRight.getValue()) {
-
-				// Linke Liste verlaengern
-				Element temp = new Element(currentLeft.next.getValue(), currentLeft.next.next);
-				currentLeft.next = currentRight;
-				currentRight.next = temp;
-
-				// Rechte Liste verkuerzen
-				 Element temp2 = new Element(right.first.getValue(),
-				 right.first.next);
-				 right.first = new Element(right.first.next.getValue(),null);
-			}
-
-			// naechste Elemente
-			currentLeft = new Element(currentLeft.next.getValue(), currentLeft.next.next);
-			if (currentRight.next != null)
-				currentRight = new Element(currentRight.next.getValue(), currentRight.next.next);
-			else
-				currentRight = new Element(currentRight.next.getValue(), null);
+		if (currentRight.getValue() < currentLeft.getValue()) {
+			left.first = new Element(right.first.getValue(), left.first);
+			right.first = right.first.next;
+			currentLeft = left.first;
 		}
 
+		while (currentLeft.next != null) {
+			if (right.first != null) {
+				if (currentLeft.next.getValue() > right.first.getValue()) {
+					currentLeft.next = new Element(right.first.getValue(), currentLeft.next);
+					right.first = right.first.next;
+				}
+			} else
+				break;
+
+			currentLeft = currentLeft.next;
+		}
 		return left;
 	}
 
-	public static void main(String[] args) {
-//		List left = new List(new Element(7, null));
-//		left.first = new Element(4, left.first);
-//		left.first = new Element(2, left.first);
-//
-//		List right = new List(new Element(6, null));
-//		right.first = new Element(3, right.first);
+	// public static void main(String[] args) {
+	// // List left = new List(new Element(7, null));
+	// // left.first = new Element(4, left.first);
+	// // left.first = new Element(2, left.first);
+	// //
+	// // List right = new List(new Element(6, null));
+	// // right.first = new Element(3, right.first);
+	//
+	// List left = new List(new Element(11, null));
+	// left.first = new Element(8, left.first);
+	// left.first = new Element(3, left.first);
+	//
+	// List right = new List(new Element(6, null));
+	// right.first = new Element(3, right.first);
+	//
+	// List merge = merge(left, right);
 
-		List left = new List(new Element(11, null));
-		left.first = new Element(8, left.first);
-		left.first = new Element(3, left.first);
+	// }
+	private List div(List list, int i) {
 
-		List right = new List(new Element(6, null));
-		right.first = new Element(3, right.first);
-		
-		
-		List merge = merge(left, right);
+		int temp = 0;
+		for (Element elem = list.first; elem != null; elem = elem.next) {
+			if (temp == i - 1) {
+				List anotherList = new List(elem.next);
+				elem.next = null;
+				return anotherList;
+			}
+			temp++;
+		}
 
+		return list;
 	}
 }
