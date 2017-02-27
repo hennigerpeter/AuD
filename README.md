@@ -1,2 +1,3 @@
 # AuD
-FAU: Algorithms and Datastructures
+# This repository contains my homeworks for the module Algorithms and Datastructures
+# Friedrich Alexander Universität Erlangen Nürnberg
