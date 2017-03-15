@@ -3,7 +3,7 @@ This repository contains my homeworks for the module Algorithms and Datastructur
 Friedrich Alexander Universität Erlangen Nürnberg
 
 ## Branches
-1. develop: 
+1. develop (obsolete):
 Current progress
-2. master (obsolete): 
+2. master: 
 code that has already been uploaded to the university server
